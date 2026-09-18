@@ -6,12 +6,13 @@ set -euo pipefail
 
 FAA_DIR="/vol/local/calarass/Projects/lipid_genomics/faa_files"
 OUT_DIR="/vol/local/calarass/Projects/ara_comp_genomics/data"
+REF_DB_DIR="/vol/local/calarass/Projects/ara_comp_genomics/results/databases"
 COMBINED_FAA="${OUT_DIR}/streptomycetae_protein_database.faa"
 DB_NAME="${OUT_DIR}/streptomycetae_protein_databa_db"
 
 THREADS="12"
 
-mkdir -p "$OUT_DIR"
+mkdir -p "$OUT_DIR" "$REF_DB_DIR"
 
 echo "Combining *.faa files from ${FAA_DIR}..."
 # awk (not cat) because several source files are missing a trailing
@@ -35,10 +36,10 @@ echo "Done. Database written to ${DB_NAME}.dmnd"
 # ----------------------------------------------------------------------
 
 COELICOLOR_FAA="${FAA_DIR}/Streptomyces_coelicolor_A3(2)_protein.faa"
-VENEZUELAE_FAA="${FAA_DIR}/Streptomyces_venezuelae_ATCC_10712_protein.faa"
+VENEZUELAE_FAA="${FAA_DIR}/Streptomyces_venezuelae_strain_NRRL_B-65442.faa"
 
-COELICOLOR_DB="${OUT_DIR}/coelicolor_db"
-VENEZUELAE_DB="${OUT_DIR}/venezuelae_db"
+COELICOLOR_DB="${REF_DB_DIR}/coelicolor_db"
+VENEZUELAE_DB="${REF_DB_DIR}/venezuelae_db"
 
 echo "Building DIAMOND database for S. coelicolor..."
 diamond makedb \

@@ -187,6 +187,12 @@ fwd_dir = output_dir / "forward"
 fwd_dir.mkdir(exist_ok=True)
 self_id_dir = output_dir / "self_id"
 self_id_dir.mkdir(exist_ok=True)
+reverse_dir = output_dir / "reverse"
+reverse_dir.mkdir(exist_ok=True)
+reciprocal_dir = output_dir / "reciprocal"
+reciprocal_dir.mkdir(exist_ok=True)
+paralog_dir = output_dir / "paralog"
+paralog_dir.mkdir(exist_ok=True)
 
 # Step 0 + 1: for each query, establish its true reference id (Step 0) and
 # run its forward search against the combined genome database (Step 1)
@@ -242,7 +248,7 @@ for group, proteome in REFERENCE_PROTEOMES.items():
         continue
 
     print(f"Step 2: writing {group} hit sequences...")
-    hits_fasta = output_dir / f"forward_hits_{group}.faa"
+    hits_fasta = fwd_dir / f"forward_hits_{group}.faa"
     with open(hits_fasta, "w") as fh:
         for sid, seq in zip(group_hits.sseqid, group_hits.full_sseq):
             fh.write(f">{sid}\n{seq}\n")
@@ -250,7 +256,7 @@ for group, proteome in REFERENCE_PROTEOMES.items():
     print(f"Step 3: reverse DIAMOND search against {group} reference proteome...")
     ref_db = REFERENCE_DBS[group]
 
-    rev_out = output_dir / f"reverse_{group}.tsv"
+    rev_out = reverse_dir / f"reverse_{group}.tsv"
     run([DIAMOND, "blastp",
          "-q", str(hits_fasta),
          "-d", str(ref_db),
@@ -271,13 +277,14 @@ rev = pd.concat(rev_tables, ignore_index=True) if rev_tables else pd.DataFrame(
 # 'ORGANISM|LOCUS_TAG|description|accession' headers - reduce to the bare
 # locus tag so it's comparable to true_ref_id below.
 rev["ref_protein"] = rev["ref_protein"].map(bare_id)
-rev.to_csv(output_dir / "reverse_hits_combined.tsv", sep="\t", index=False)
+rev.to_csv(reverse_dir / "reverse_hits_combined.tsv", sep="\t", index=False)
 
 
 # Step 4: reciprocal check, per reference organism
 
 # collapse in-genome paralogs: keep only the top-scoring forward hit per (qseqid, genome)
 if GENOME_SEP:
+    print(f"Using genome separator: {GENOME_SEP}")
     fwd_hits["genome"] = fwd_hits.sseqid.str.split(GENOME_SEP, regex=False).str[0]
 
     # best forward bitscore per query, per genome
@@ -302,5 +309,8 @@ reciprocal_check_df = fwd_hits.merge(
     how="left",
 ).drop(columns=["ref_protein", "hit"])  # only rev_bitscore is kept from best_rev
 
-# Keep rev hits not already accounted for in reciprocal_check_df's genome column
-possible_paralogs = rev[~rev.hit.isin(reciprocal_check_df.genome)]
+# Keep rev hits not already accounted for in reciprocal_check_df's sseqid column
+possible_paralogs = rev[~rev.hit.isin(reciprocal_check_df.sseqid)]
+
+reciprocal_check_df.to_csv(reciprocal_dir / "reciprocal_hits.tsv", sep="\t", index=False)
+possible_paralogs.to_csv(paralog_dir / "possible_paralogs.tsv", sep="\t", index=False)

@@ -27,6 +27,7 @@ fwd_scov: 70
 
 rev_evalue: 1.0e-5
 rev_max_targets: 5
-genome_sep: null
+# genome separator, if none then the in_paralogs are not filtered 
+genome_sep: "|"
 
 self_id_min_pident: 98.0

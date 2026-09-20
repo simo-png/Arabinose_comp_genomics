@@ -15,60 +15,108 @@ Reciprocal (bidirectional) DIAMOND search.
           organism) is the query it came from (identified via Step 0's true
           reference id, not the query filename/id)
 
-Requirements: diamond, pandas
+All run parameters (paths, reference organisms, DIAMOND thresholds) live in
+a YAML config file, validated by the Config model below - pass the config
+path as the first CLI argument, e.g.:
+
+    python run_bidirectional_blast.py ../config/streptomycetae.yaml
+    python run_bidirectional_blast.py ../config/actinomycetes.yaml
+
+Requirements: diamond, pandas, pydantic, pyyaml
 """
 
+
 import subprocess
+import sys
 from pathlib import Path
+from typing import Dict, Optional
 
 import pandas as pd
+import yaml
+from pydantic import BaseModel, Field, model_validator
 
 # Diamond binary (explicit path so this works even when the interpreter's
-# PATH doesn't include the conda env, e.g. when run from VSCode)
+# PATH doesn't include the conda env, e.g. when run from VSCode). Same
+# across runs/species, so it's not part of the per-run YAML config.
 DIAMOND = "/vol/local/calarass/envs/diamond/bin/diamond"
 
-# Paths
-fasta_dir = Path("/vol/local/calarass/Projects/ara_comp_genomics/data/arabinose_clusters")
-diamond_db = Path("/vol/local/calarass/Projects/ara_comp_genomics/data/streptomycetae_protein_databa_db.dmnd")
-output_dir = Path("/vol/local/calarass/Projects/ara_comp_genomics/results/diamond_rbh_actinos_my_proteins")
-
-# Each query belongs to one of these reference organisms, identified by its
-# query_file prefix (SCO* -> coelicolor, VNZ* -> venezuelae). A hit only counts as
-# reciprocal if it reverse-checks best against ITS OWN reference organism.
-REFERENCE_PROTEOMES = {
-    "SCO": Path("/vol/local/calarass/Projects/lipid_genomics/faa_files/Streptomyces_coelicolor_A3(2)_protein.faa"),
-    "VNZ": Path("/vol/local/calarass/Projects/lipid_genomics/faa_files/Streptomyces_venezuelae_strain_NRRL_B-65442.faa"),
-}
-
-# Pre-built DIAMOND databases for each reference proteome (built already by
-# run_streptomyceate.sh from the exact same .faa files above) - reused here
-# instead of rebuilding with `diamond makedb` on every run.
-REFERENCE_DBS = {
-    "SCO": Path("/vol/local/calarass/Projects/ara_comp_genomics/results/databases/coelicolor_db.dmnd"),
-    "VNZ": Path("/vol/local/calarass/Projects/ara_comp_genomics/results/databases/venezuelae_db.dmnd"),
-}
-
-THREADS = "12"
-
-FWD_EVALUE = "1e-5"
-FWD_ID = "65"      
-FWD_QCOV = "70"
-FWD_SCOV = "70"    
-
-REV_EVALUE = "1e-5"
-REV_MAX_TARGETS = "5"
-GENOME_SEP = None
+# Output schema for each DIAMOND call - fixed regardless of species/run,
+# so these stay as code constants rather than YAML config.
 FWD_COLS = ["qseqid", "sseqid", "pident", "length", "qlen", "slen",
             "qstart", "qend", "sstart", "send", "evalue", "bitscore",
             "full_sseq"]
 REV_COLS = ["qseqid", "sseqid", "pident", "evalue", "bitscore"]
-
-# A query is expected to BE a protein already present in its own reference
-# proteome, not just a homolog of one. Step 0 requires at least this percent
-# identity against the query's own reference organism and hard-fails
-# otherwise, rather than silently accepting a weaker match.
-SELF_ID_MIN_PIDENT = 98.0
 SELF_ID_COLS = ["qseqid", "sseqid", "pident", "bitscore"]
+
+DEFAULT_CONFIG_PATH = Path(__file__).resolve().parent.parent / "config" / "streptomycetae.yaml"
+
+
+class Config(BaseModel):
+    # Paths
+    fasta_dir: Path
+    diamond_db: Path
+    output_dir: Path
+
+    # Each query belongs to one of these reference organisms, identified by
+    # its query_file prefix (e.g. SCO* -> coelicolor, VNZ* -> venezuelae). A
+    # hit only counts as reciprocal if it reverse-checks best against ITS
+    # OWN reference organism. reference_dbs are the pre-built DIAMOND
+    # databases (via run_streptomyceate.sh) for the exact same proteomes.
+    reference_proteomes: Dict[str, Path]
+    reference_dbs: Dict[str, Path]
+
+    threads: int = Field(gt=0)
+
+    fwd_evalue: float = Field(gt=0)
+    fwd_id: float = Field(ge=0, le=100)
+    fwd_qcov: float = Field(ge=0, le=100)
+    fwd_scov: Optional[float] = Field(default=None, ge=0, le=100)
+
+    rev_evalue: float = Field(gt=0)
+    rev_max_targets: int = Field(gt=0)
+    genome_sep: Optional[str] = None
+
+    # A query is expected to BE a protein already present in its own
+    # reference proteome, not just a homolog of one. Step 0 requires at
+    # least this percent identity against the query's own reference
+    # organism and hard-fails otherwise, rather than silently accepting a
+    # weaker match.
+    self_id_min_pident: float = Field(ge=0, le=100)
+
+    @model_validator(mode="after")
+    def _proteomes_and_dbs_match(self):
+        proteome_groups = set(self.reference_proteomes)
+        db_groups = set(self.reference_dbs)
+        if proteome_groups != db_groups:
+            raise ValueError(
+                "reference_proteomes and reference_dbs must define the same "
+                f"groups: {sorted(proteome_groups)} vs {sorted(db_groups)}"
+            )
+        return self
+
+
+config_path = Path(sys.argv[1]) if len(sys.argv) > 1 else DEFAULT_CONFIG_PATH
+with open(config_path) as fh:
+    cfg = Config(**yaml.safe_load(fh))
+
+fasta_dir = cfg.fasta_dir
+diamond_db = cfg.diamond_db
+output_dir = cfg.output_dir
+REFERENCE_PROTEOMES = cfg.reference_proteomes
+REFERENCE_DBS = cfg.reference_dbs
+
+THREADS = str(cfg.threads)
+
+FWD_EVALUE = str(cfg.fwd_evalue)
+FWD_ID = str(cfg.fwd_id)
+FWD_QCOV = str(cfg.fwd_qcov)
+FWD_SCOV = str(cfg.fwd_scov) if cfg.fwd_scov is not None else None
+
+REV_EVALUE = str(cfg.rev_evalue)
+REV_MAX_TARGETS = str(cfg.rev_max_targets)
+GENOME_SEP = cfg.genome_sep
+
+SELF_ID_MIN_PIDENT = cfg.self_id_min_pident
 
 
 def run(cmd):
@@ -195,9 +243,8 @@ for group, proteome in REFERENCE_PROTEOMES.items():
 
     print(f"Step 2: writing {group} hit sequences...")
     hits_fasta = output_dir / f"forward_hits_{group}.faa"
-    uniq = group_hits.drop_duplicates("sseqid")
     with open(hits_fasta, "w") as fh:
-        for sid, seq in zip(uniq.sseqid, uniq.full_sseq):
+        for sid, seq in zip(group_hits.sseqid, group_hits.full_sseq):
             fh.write(f">{sid}\n{seq}\n")
 
     print(f"Step 3: reverse DIAMOND search against {group} reference proteome...")
@@ -229,59 +276,31 @@ rev.to_csv(output_dir / "reverse_hits_combined.tsv", sep="\t", index=False)
 
 # Step 4: reciprocal check, per reference organism
 
-# Best reverse hit(s) per (subject, reference organism); ties in bitscore are all kept
-top = rev.groupby(["hit", "ref_group"])["rev_bitscore"].transform("max")
-best = rev[rev.rev_bitscore == top].groupby(["hit", "ref_group"])["ref_protein"].apply(set)
-best_bitscore = rev.groupby(["hit", "ref_group"])["rev_bitscore"].max()
-
-fwd_hits["reverse_best_hit"] = [
-    ";".join(sorted(best.get((s, g), set())))
-    for s, g in zip(fwd_hits.sseqid, fwd_hits.ref_group)
-]
-fwd_hits["reverse_best_bitscore"] = [
-    best_bitscore.get((s, g))
-    for s, g in zip(fwd_hits.sseqid, fwd_hits.ref_group)
-]
-fwd_hits["reciprocal"] = [
-    q in best.get((s, g), set())
-    for q, s, g in zip(fwd_hits.true_ref_id, fwd_hits.sseqid, fwd_hits.ref_group)
-]
-
+# collapse in-genome paralogs: keep only the top-scoring forward hit per (qseqid, genome)
 if GENOME_SEP:
     fwd_hits["genome"] = fwd_hits.sseqid.str.split(GENOME_SEP, regex=False).str[0]
-    top_fwd = fwd_hits.groupby(["qseqid", "genome"])["bitscore"].transform("max")
-    fwd_hits["best_forward_in_genome"] = fwd_hits.bitscore == top_fwd
-    fwd_hits["strict_rbh"] = fwd_hits.reciprocal & fwd_hits.best_forward_in_genome
 
+    # best forward bitscore per query, per genome
+    top_fwd_bitscore = fwd_hits.groupby(["qseqid", "genome"])["bitscore"].transform("max")
 
-# Output
-# ----------------------------------------------------------------------
-out_cols = [c for c in fwd_hits.columns if c != "full_sseq"]
-fwd_hits[out_cols].to_csv(output_dir / "all_forward_hits_flagged.tsv",
-                     sep="\t", index=False)
-fwd_hits.loc[fwd_hits.reciprocal, out_cols].to_csv(output_dir / "reciprocal_hits.tsv",
-                                         sep="\t", index=False)
+    # only the best hit(s) survive - true orthologs candidates, one per genome per query
+    fwd_hits_best = fwd_hits[fwd_hits.bitscore == top_fwd_bitscore]
 
-# Possible paralogs: forward hits whose reverse search found a real best hit
-# (so the reverse search worked), but that best hit is some OTHER gene in the
-# reference proteome, not the query itself. That's the signature of a
-# paralog: a protein similar enough to show up as a forward hit for this
-# query, but whose closest relative back home is a different gene.
-possible_paralogs = fwd_hits.loc[
-    (~fwd_hits.reciprocal) & (fwd_hits.reverse_best_hit != ""),
-    ["query_file", "true_ref_id", "ref_group", "sseqid", "pident", "bitscore",
-     "reverse_best_hit", "reverse_best_bitscore"],
-].rename(columns={
-    "sseqid": "forward_hit",
-    "pident": "forward_pident",
-    "bitscore": "forward_bitscore",
-})
-possible_paralogs.to_csv(output_dir / "possible_paralogs.tsv", sep="\t", index=False)
+# Step 4, rewrite (v2) - building this up line by line
 
-summary = (fwd_hits.groupby("qseqid")
-              .agg(forward_hits=("sseqid", "size"),
-                   reciprocal_hits=("reciprocal", "sum")))
-summary.to_csv(output_dir / "summary_per_query.tsv", sep="\t")
-print("\nHits per query:")
-print(summary.to_string())
-print(f"\nDone. Build your presence/absence matrix from {output_dir / 'reciprocal_hits.tsv'}")
+# max reverse bitscore per (hit, ref_group)
+max_bitscore = rev.groupby(["hit", "ref_group"])["rev_bitscore"].transform("max")
+
+# keep only the top-scoring row(s) per group (ties included)
+best_rev = rev[rev.rev_bitscore == max_bitscore]
+
+# left-merge so every forward hit is kept; a match means true_ref_id was among the top reverse hits for that sseqid, within its own ref_group
+reciprocal_check_df = fwd_hits.merge(
+    best_rev[["hit", "ref_group", "ref_protein", "rev_bitscore"]],
+    left_on=["true_ref_id", "sseqid", "ref_group"],
+    right_on=["ref_protein", "hit", "ref_group"],
+    how="left",
+).drop(columns=["ref_protein", "hit"])  # only rev_bitscore is kept from best_rev
+
+# Keep rev hits not already accounted for in reciprocal_check_df's genome column
+possible_paralogs = rev[~rev.hit.isin(reciprocal_check_df.genome)]

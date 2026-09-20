@@ -287,6 +287,11 @@ if GENOME_SEP:
     print(f"Using genome separator: {GENOME_SEP}")
     fwd_hits["genome"] = fwd_hits.sseqid.str.split(GENOME_SEP, regex=False).str[0]
 
+    # "[Kitasatospora]_papulosa" is the same organism as "Kitasatospora_papulosa" -
+    # normalize so it isn't treated as a separate genome
+    if (fwd_hits.genome == "[Kitasatospora]_papulosa").any():
+        fwd_hits.loc[fwd_hits.genome == "[Kitasatospora]_papulosa", "genome"] = "Kitasatospora_papulosa"
+
     # best forward bitscore per query, per genome
     top_fwd_bitscore = fwd_hits.groupby(["qseqid", "genome"])["bitscore"].transform("max")
 

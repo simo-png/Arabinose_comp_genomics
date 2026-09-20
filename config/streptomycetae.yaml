@@ -31,3 +31,21 @@ rev_max_targets: 5
 genome_sep: "|"
 
 self_id_min_pident: 98.0
+
+# Presence/absence correlation matrix (2_parse_diamond_make_cor_matrix.py).
+# species_list: one genome/species name per line - must match the "genome"
+# column values in reciprocal_hits.tsv (i.e. the sseqid prefix before
+# genome_sep) or that row is skipped with a warning.
+species_list: /vol/local/calarass/Projects/lipid_genomics/faa_files/species_list.txt
+genes_of_interest:
+  - SCO2401
+  - SCO2402
+  - SCO2403
+  - SCO2407
+  - SCO2440
+  - SCO2439
+  - vnz_RS33505
+  - vnz_RS33510
+  - vnz_RS33515
+  - vnz_RS33520
+correlation_matrix_name: correlation_matrix.csv

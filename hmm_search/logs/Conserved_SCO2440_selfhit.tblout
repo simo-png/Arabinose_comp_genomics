@@ -1,0 +1,32 @@
+#                                                                                               --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                        accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                                ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+Streptoymces_cyanogenus-S1361_13400-90%              -          Conserved_SCO2440    -           1.3e-154  503.3   4.3  1.4e-154  503.2   4.3   1.0   1   0   0   1   1   1   1 -
+streptomyces_canus-QF037_006459-90%                  -          Conserved_SCO2440    -           1.1e-153  500.3   4.0  1.2e-153  500.1   4.0   1.0   1   0   0   1   1   1   1 -
+Streptomyces_avermitilis-SAVERM_5741-89%             -          Conserved_SCO2440    -           6.1e-153  497.8   5.5  6.8e-153  497.7   5.5   1.0   1   0   0   1   1   1   1 -
+Streptomyces_milbemycinicus-ACI2L5_15050-82%         -          Conserved_SCO2440    -           6.5e-153  497.7   5.2  7.4e-153  497.5   5.2   1.0   1   0   0   1   1   1   1 -
+Streptomyces_anthocyanus-OHB34_12180-100%            -          Conserved_SCO2440    -           8.5e-153  497.3   6.9  9.5e-153  497.2   6.9   1.0   1   0   0   1   1   1   1 -
+Streptomyces_coelicolor_SCO2440                      -          Conserved_SCO2440    -           8.5e-153  497.3   6.9  9.5e-153  497.2   6.9   1.0   1   0   0   1   1   1   1 -
+Streptomyces                                         -          Conserved_SCO2440    -             2e-152  496.2   5.1  2.2e-152  496.0   5.1   1.0   1   0   0   1   1   1   1 lincolnensis-SLINC_2780-88%
+Streptomyces_roseirectus-IAG44_28025-88%             -          Conserved_SCO2440    -           1.8e-151  493.0   5.8    2e-151  492.9   5.8   1.0   1   0   0   1   1   1   1 -
+Streptoymces_iranensis-J2Z30_005939-81%              -          Conserved_SCO2440    -           2.3e-151  492.7   4.9  2.6e-151  492.5   4.9   1.0   1   0   0   1   1   1   1 -
+Streptomyces_xanthii-IAG42_24485-87%                 -          Conserved_SCO2440    -           1.2e-150  490.3   6.9  1.3e-150  490.2   6.9   1.0   1   0   0   1   1   1   1 -
+Actinacidiphila_glaucinigra-SAMN05216252_10197-81%   -          Conserved_SCO2440    -           1.5e-150  490.0   4.1  1.7e-150  489.8   4.1   1.0   1   0   0   1   1   1   1 -
+Streptomyces_marincola-CAG99_20925-81%               -          Conserved_SCO2440    -             3e-148  482.4   4.2  3.3e-148  482.3   4.2   1.0   1   0   0   1   1   1   1 -
+Streptomyces_genisteinicus-IAG43_01970-81%           -          Conserved_SCO2440    -           7.1e-146  474.7   3.9  7.9e-146  474.5   3.9   1.0   1   0   0   1   1   1   1 -
+Yinghuangia_soli-LZ495_28540-75%                     -          Conserved_SCO2440    -           8.6e-140  454.7   7.6  9.7e-140  454.6   7.6   1.0   1   0   0   1   1   1   1 -
+Actinocatenispora_sera-Asera_57670-62%               -          Conserved_SCO2440    -           5.5e-134  435.7   7.5  6.2e-134  435.5   7.5   1.0   1   0   0   1   1   1   1 -
+Actinopolyspora_erythraea-IL38_19915-61%             -          Conserved_SCO2440    -           4.5e-132  429.4   1.1    5e-132  429.3   1.1   1.0   1   0   0   1   1   1   1 -
+Actinopolymorpha_singaporensis-SAMN04489717_0384-61% -          Conserved_SCO2440    -           9.9e-132  428.3   4.6  1.1e-131  428.1   4.6   1.0   1   0   0   1   1   1   1 -
+Saccharopolyspore_erythraea-GCM10009533_15180-61%    -          Conserved_SCO2440    -           2.2e-131  427.2   3.6  2.5e-131  427.0   3.6   1.0   1   0   0   1   1   1   1 -
+Natronosporangium_hydrolyticum-JQS43_13595-57%       -          Conserved_SCO2440    -           1.5e-123  401.5   7.3  1.8e-123  401.3   7.3   1.0   1   0   0   1   1   1   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /vol/local/calarass/Projects/ara_comp_genomics/hmm_search/profiles/individual/Conserved_SCO2440.hmm
+# Target file:     /vol/local/calarass/Projects/ara_comp_genomics/hmm_search/data/seeds/Conserved_SCO2440.txt
+# Option settings: hmmsearch --tblout /vol/local/calarass/Projects/ara_comp_genomics/hmm_search/logs/Conserved_SCO2440_selfhit.tblout --noali /vol/local/calarass/Projects/ara_comp_genomics/hmm_search/profiles/individual/Conserved_SCO2440.hmm /vol/local/calarass/Projects/ara_comp_genomics/hmm_search/data/seeds/Conserved_SCO2440.txt 
+# Current dir:     /vol/local/calarass/Projects/ara_comp_genomics/hmm_search
+# Date:            Mon Sep 21 22:02:00 2026
+# [ok]

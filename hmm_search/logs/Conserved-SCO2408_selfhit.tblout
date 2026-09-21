@@ -1,0 +1,14 @@
+#                                                                          --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                   accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#           ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+Streptomyces_coelicolor-SCO2408 -          Conserved-SCO2408    -                  0 1273.0  32.9         0 1272.9  32.9   1.0   1   0   0   1   1   1   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /vol/local/calarass/Projects/ara_comp_genomics/hmm_search/profiles/individual/Conserved-SCO2408.hmm
+# Target file:     /vol/local/calarass/Projects/ara_comp_genomics/hmm_search/data/seeds/Conserved-SCO2408.txt
+# Option settings: hmmsearch --tblout /vol/local/calarass/Projects/ara_comp_genomics/hmm_search/logs/Conserved-SCO2408_selfhit.tblout --noali /vol/local/calarass/Projects/ara_comp_genomics/hmm_search/profiles/individual/Conserved-SCO2408.hmm /vol/local/calarass/Projects/ara_comp_genomics/hmm_search/data/seeds/Conserved-SCO2408.txt 
+# Current dir:     /vol/local/calarass/Projects/ara_comp_genomics/hmm_search
+# Date:            Mon Sep 21 22:02:00 2026
+# [ok]

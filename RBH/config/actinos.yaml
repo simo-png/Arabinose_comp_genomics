@@ -1,0 +1,53 @@
+# Config for the reciprocal DIAMOND run against the broader Actinobacteria
+# genome set ("actinos"), looking for arabinose-cluster orthologs beyond
+# Streptomycetae. Reference organisms and query FASTAs are the same as in
+# streptomycetae.yaml.
+# Usage: python run_bidirectional_blast.py ../config/actinos.yaml
+
+fasta_dir: /vol/local/calarass/Projects/ara_comp_genomics/data/arabinose_clusters
+diamond_db: /vol/local/calarass/Projects/ara_comp_genomics/data/actinos_protein_database_db.dmnd
+output_dir: /vol/local/calarass/Projects/ara_comp_genomics/results/diamond_reverseBLAST_actinos
+
+# Each query belongs to one of these reference organisms, identified by its
+# query_file prefix (e.g. SCO* -> coelicolor, VNZ* -> venezuelae).
+reference_proteomes:
+  SCO: /vol/local/calarass/Projects/lipid_genomics/faa_files/Streptomyces_coelicolor_A3(2)_protein.faa
+  VNZ: /vol/local/calarass/Projects/lipid_genomics/faa_files/Streptomyces_venezuelae_strain_NRRL_B-65442.faa
+
+# Pre-built DIAMOND databases for the exact same proteomes above (built by
+# make_databases_sterptomycetae.sh; reused as-is for this run).
+reference_dbs:
+  SCO: /vol/local/calarass/Projects/ara_comp_genomics/results/databases/coelicolor_db.dmnd
+  VNZ: /vol/local/calarass/Projects/ara_comp_genomics/results/databases/venezuelae_db.dmnd
+
+threads: 12
+
+fwd_evalue: 1.0e-5
+fwd_id: 65
+fwd_qcov: 70
+fwd_scov: 70
+
+rev_evalue: 1.0e-5
+rev_max_targets: 5
+# genome separator, if none then the in_paralogs are not filtered
+genome_sep: "|"
+
+self_id_min_pident: 98.0
+
+# Presence/absence correlation matrix (2_parse_diamond_make_cor_matrix.py).
+# species_list: one genome/species name per line - must match the "genome"
+# column values in reciprocal_hits.tsv (i.e. the sseqid prefix before
+# genome_sep) or that row is skipped with a warning.
+species_list: /vol/local/calarass/Projects/ara_comp_genomics/data/actinos_species_list.txt
+genes_of_interest:
+  - SCO2401
+  - SCO2402
+  - SCO2403
+  - SCO2407
+  - SCO2440
+  - SCO2439
+  - vnz_RS33505
+  - vnz_RS33510
+  - vnz_RS33515
+  - vnz_RS33520
+correlation_matrix_name: correlation_matrix.csv

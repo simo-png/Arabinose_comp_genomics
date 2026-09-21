@@ -12,3 +12,34 @@ A running log of decisions and changes made to this project, in chronological or
 ## 2026-09-20
 
 - TODO: need to provide the script for generating the list of species `.txt` file.
+- Adding the tree text manually to the `itol_binary_*` files (the tree was built without *S. coelicolor* and the other *S. venezuelae* strain, so this is a manual step rather than part of the pipeline).
+
+- Ran into ID-matching errors when annotating the tree — the following IDs couldn't be found in the tree:
+```
+Couldn't find ID Kitasatospora_camelliae in the tree
+Couldn't find ID Peterkaempfera_sp._SMS_1(5)a in the tree
+Couldn't find ID Streptomyces_albus in the tree
+Couldn't find ID Streptomyces_avidinii in the tree
+Couldn't find ID Streptomyces_caniferus in the tree
+Couldn't find ID Streptomyces_luomodiensis in the tree
+Couldn't find ID Streptomyces_nigrescens in the tree
+Couldn't find ID Streptomyces_okerensis in the tree
+Couldn't find ID Streptomyces_venezuelae in the tree
+Couldn't find ID Streptomyces_xinghaiensis_S187 in the tree
+Couldn't find ID Streptomyces_coelicolor_A3(2) in the tree
+Couldn't find ID (Streptomyces_nigra:0.064879456 in the tree
+```
+
+### Errors streptomycetae old
+```
+Couldn't find ID Kitasatospora_camelliae in the tree
+Couldn't find ID Peterkaempfera_sp._SMS_1(5)a in the tree
+Couldn't find ID Streptomyces_albus in the tree
+Couldn't find ID Streptomyces_avidinii in the tree
+Couldn't find ID Streptomyces_caniferus in the tree
+Couldn't find ID Streptomyces_luomodiensis in the tree
+Couldn't find ID Streptomyces_nigrescens in the tree
+Couldn't find ID Streptomyces_okerensis in the tree
+Couldn't find ID Streptomyces_xinghaiensis_S187 in the tree
+Couldn't find ID (Streptomyces_nigra:0.064879456 in the tree
+```

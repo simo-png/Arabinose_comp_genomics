@@ -1,0 +1,30 @@
+#                                                                                              --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                       accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                               ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+Streptomyces_anthocyanicus-OHB34_11990-100%         -          Conserved_SCO2402    -           1.6e-197  645.4  11.8  1.8e-197  645.2  11.8   1.0   1   0   0   1   1   1   1 -
+Streptomyces_coelicolor-SCO2402                     -          Conserved_SCO2402    -           1.6e-197  645.4  11.8  1.8e-197  645.2  11.8   1.0   1   0   0   1   1   1   1 -
+Streptomyces_lincolnensis-SLINC_2751-82%            -          Conserved_SCO2402    -           7.6e-197  643.2  10.1  8.5e-197  643.0  10.1   1.0   1   0   0   1   1   1   1 -
+Streptomyces_canus-QF037_006489-89%                 -          Conserved_SCO2402    -           2.3e-196  641.6  11.1  2.6e-196  641.4  11.1   1.0   1   0   0   1   1   1   1 -
+Strptomyces_avermitilis-SAVERM_5771-90%             -          Conserved_SCO2402    -           8.9e-196  639.6  11.9    1e-195  639.5  11.9   1.0   1   0   0   1   1   1   1 -
+Streptomyces_roseirectus-IAG44_28120-89%            -          Conserved_SCO2402    -           2.5e-195  638.2   9.4  2.8e-195  638.0   9.4   1.0   1   0   0   1   1   1   1 -
+Streptomyces_cyanogenus-S1361_13315-89%             -          Conserved_SCO2402    -           3.5e-194  634.4  11.7  3.9e-194  634.3  11.7   1.0   1   0   0   1   1   1   1 -
+Streptomyces_milbemycinicus-ACI2L5_14840-79%        -          Conserved_SCO2402    -           6.4e-188  613.8  12.4  7.8e-188  613.5  12.4   1.0   1   0   0   1   1   1   1 -
+Streptomyces_iranensis-J2Z30_005919-80%             -          Conserved_SCO2402    -           2.7e-187  611.8  11.6    3e-187  611.6  11.6   1.0   1   0   0   1   1   1   1 -
+Actinacidiphila_glaucinigra-SAMN05216252_101114-77% -          Conserved_SCO2402    -           8.3e-185  603.6  15.4  9.2e-185  603.4  15.4   1.0   1   0   0   1   1   1   1 -
+Streptomyces_xanthii-IAG42_24520-78%                -          Conserved_SCO2402    -           3.7e-184  601.4  15.6  4.2e-184  601.3  15.6   1.0   1   0   0   1   1   1   1 -
+Streptomyces_genisteinicus-IAG43_01950-76%          -          Conserved_SCO2402    -           4.3e-181  591.4  17.6  4.8e-181  591.2  17.6   1.0   1   0   0   1   1   1   1 -
+Yinghuangia-Z495_28530-72%                          -          Conserved_SCO2402    -           4.8e-179  584.6  13.5  5.7e-179  584.4  13.5   1.0   1   0   0   1   1   1   1 -
+Saccharopolyspora_erythraea-GCM10009533_07550-57%   -          Conserved_SCO2402    -           1.1e-171  560.4  12.5  1.3e-171  560.2  12.5   1.0   1   0   0   1   1   1   1 -
+Streptomyces_marincola-CAG99_20995-66%              -          Conserved_SCO2402    -           1.2e-168  550.5  21.7  1.3e-168  550.3  21.7   1.0   1   0   0   1   1   1   1 -
+Actinocatenispora_sera-Asera_57700-60%              -          Conserved_SCO2402    -           2.8e-167  546.0  22.1  3.1e-167  545.8  22.1   1.0   1   0   0   1   1   1   1 -
+Actinopolyspora_erythraea-IL38_19930-56%            -          Conserved_SCO2402    -           5.3e-164  535.2  11.8  5.9e-164  535.0  11.8   1.0   1   0   0   1   1   1   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /vol/local/calarass/Projects/ara_comp_genomics/hmm_search/profiles/individual/Conserved_SCO2402.hmm
+# Target file:     /vol/local/calarass/Projects/ara_comp_genomics/hmm_search/data/seeds/Conserved_SCO2402.txt
+# Option settings: hmmsearch --tblout /vol/local/calarass/Projects/ara_comp_genomics/hmm_search/logs/Conserved_SCO2402_selfhit.tblout --noali /vol/local/calarass/Projects/ara_comp_genomics/hmm_search/profiles/individual/Conserved_SCO2402.hmm /vol/local/calarass/Projects/ara_comp_genomics/hmm_search/data/seeds/Conserved_SCO2402.txt 
+# Current dir:     /vol/local/calarass/Projects/ara_comp_genomics/hmm_search
+# Date:            Mon Sep 21 22:02:00 2026
+# [ok]

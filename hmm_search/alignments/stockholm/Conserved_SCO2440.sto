@@ -22,23 +22,23 @@ Actinopolyspora_erythraea-IL38_19915-61%             MARAVPALQRAFDILELFLDEP-ELSA
 Actinopolymorpha_singaporensis-SAMN04489717_0384-61% MGRAVPAVLRALDILELFGTTE-ELSIPEIHSRLGLPRTTVHELVGTLVERSYLAPVPGQPHRFRLGVGVFHLGSAYAERLDLAREGQAAAEEVAAACDETVHVAVLEGRDVVYVAKVDSTHPVRMVSAVGRRLPAHCTAVGLMLLARLEQRSLDTLFPPGRRLPGLTSRSLTTSRQLRDRLGAVRTD-GLAQEYCESNE
 Natronosporangium_hydrolyticum-JQS43_13595-57%       MSRAVPAVSRALDILELLGEQP-ALAAPEIAARLGLPRTTVHELLHTLSARGYLVTEASNPLRYRLGGRLCHLGGHAAAGLDLTTEAGSAARRVAAECGETAHVAVLEGIEVVYIAKQDSAHPVRMVSAVGRRLPAHCTAVGKVLLAALPEAAVAERYPAGQPLPGLTERSIRDLPTLHAALRTVRAD-GIALDDCEANE
 
-Streptomyces_coelicolor_SCO2440                      DVSCVAAPVRDRTGRVVAALSISVPMIRWSEERRAELEQLAVKGAADLSERLGHRSAA-----------------------------------------------------------------------
-Streptomyces_anthocyanus-OHB34_12180-100%            DVSCVAAPVRDRTGRVVAALSISVPMIRWSEERRAELEQLAVKGAADLSERLGHRSAA-----------------------------------------------------------------------
-Streptoymces_cyanogenus-S1361_13400-90%              DVSCVAAPVRDRTGQVVAALSISVPMIRWSEERRAELEQLAAKGATELSERLGHRGGA-----------------------------------------------------------------------
-streptomyces_canus-QF037_006459-90%                  DVSCVAAPVRDRTGRVVAALSISVPMIRWSDERRDELEQLAAKGAAQLSERLGHRSVG-----------------------------------------------------------------------
-Streptomyces_avermitilis-SAVERM_5741-89%             DVSCVAAPVRDRAGQVVAALSISIPMIRWSDERRVELEQLAVKGAAELSERLGHRSVG-----------------------------------------------------------------------
-Streptomyces                                         DVSCVAAPVRDRAGRVVAAMSISVPMIRWSDERRVELEQLAVKGAAELSERLGYRSVA-----------------------------------------------------------------------
-Streptomyces_roseirectus-IAG44_28025-88%             DVSCVAAPVRDRTGQVVAALSISVPMIRWSDERRVELEQLAAKGAVDLSERLGYRSVV-----------------------------------------------------------------------
-Streptomyces_xanthii-IAG42_24485-87%                 DVSCVAAPVRDRTNRVVAALSVSVPMVRWSEAREAELAELVVKGAADLSERLGHRGRP-----------------------------------------------------------------------
+Streptomyces_coelicolor_SCO2440                      DVSCVAAPVRDRTGRVVAALSISVPMIRWSEERRAELEQLAVKGAADLSERLGHRSA-----------------------------------------------------------------------A
+Streptomyces_anthocyanus-OHB34_12180-100%            DVSCVAAPVRDRTGRVVAALSISVPMIRWSEERRAELEQLAVKGAADLSERLGHRSA-----------------------------------------------------------------------A
+Streptoymces_cyanogenus-S1361_13400-90%              DVSCVAAPVRDRTGQVVAALSISVPMIRWSEERRAELEQLAAKGATELSERLGHRGG-----------------------------------------------------------------------A
+streptomyces_canus-QF037_006459-90%                  DVSCVAAPVRDRTGRVVAALSISVPMIRWSDERRDELEQLAAKGAAQLSERLGHRSV-----------------------------------------------------------------------G
+Streptomyces_avermitilis-SAVERM_5741-89%             DVSCVAAPVRDRAGQVVAALSISIPMIRWSDERRVELEQLAVKGAAELSERLGHRSV-----------------------------------------------------------------------G
+Streptomyces                                         DVSCVAAPVRDRAGRVVAAMSISVPMIRWSDERRVELEQLAVKGAAELSERLGYRSV-----------------------------------------------------------------------A
+Streptomyces_roseirectus-IAG44_28025-88%             DVSCVAAPVRDRTGQVVAALSISVPMIRWSDERRVELEQLAAKGAVDLSERLGYRSV-----------------------------------------------------------------------V
+Streptomyces_xanthii-IAG42_24485-87%                 DVSCVAAPVRDRTNRVVAALSVSVPMVRWSEAREAELAELVVKGAADLSERLGHRGR-----------------------------------------------------------------------P
 Actinacidiphila_glaucinigra-SAMN05216252_10197-81%   DVSCVAAPVRDSVGRVVAALSISVPMIRWNEERRAELEELAVKGAAELSERLGHRGGA----------------------------------------------------------------------R
 Streptomyces_milbemycinicus-ACI2L5_15050-82%         DVSCVAAPVRDSVGKVVAALSISVPMIRWSEERQEELAELAAKGAGELSARLGHRRRG----------------------------------------------------------------------A
-Streptomyces_genisteinicus-IAG43_01970-81%           DVSCVAAPVRDRTGRVVAALSVSVPMIRWSDARRAELEELAVKGAGELSGRLGFRGTR-----------------------------------------------------------------------
+Streptomyces_genisteinicus-IAG43_01970-81%           DVSCVAAPVRDRTGRVVAALSVSVPMIRWSDARRAELEELAVKGAGELSGRLGFRGT-----------------------------------------------------------------------R
 Streptomyces_marincola-CAG99_20925-81%               DVSCVAGPVRNRTGRVVAALSISVPMIRWSADRQEELAALAVRGAAQLSERLGHHAG------------------------------------------------------------------------
 Streptoymces_iranensis-J2Z30_005939-81%              DVNCVAAPVRDSAGKVVAALSISVPTIRWSDERQTELEELAAKGAGELSVRLGHRRRD----------------------------------------------------------------------I
 Yinghuangia_soli-LZ495_28540-75%                     DVSCVAAPVRDETGRVVAALSISAPTIRWDDNRHAELERLAATGAGNLSARLGHRQAA----------------------------------------------------------------------P
-Actinocatenispora_sera-Asera_57670-62%               AVACVAAPVRDHEGEVVAAMSISVPVLRWTDESAAKLTDVVRDGADALSARLGHRAGRPLPPPA-----------------------------------------------------------------
-Saccharopolyspore_erythraea-GCM10009533_15180-61%    AVACVAAPVRDQSGEVVAALSISAPILRWNEETEPALRELACEGARLLSERLGHRPAG-----------------------------------------------------------------------
+Actinocatenispora_sera-Asera_57670-62%               AVACVAAPVRDHEGEVVAAMSISVPVLRWTDESAAKLTDVVRDGADALSARLGHRAGRPLPPP-----------------------------------------------------------------A
+Saccharopolyspore_erythraea-GCM10009533_15180-61%    AVACVAAPVRDQSGEVVAALSISAPILRWNEETEPALRELACEGARLLSERLGHRPA-----------------------------------------------------------------------G
 Actinopolyspora_erythraea-IL38_19915-61%             AVACVAAPVRDHYGGVVAAMSIAVPILRWSERSERELAETVVRGARNLSERLGNRA-------------------------------------------------------------------------
-Actinopolymorpha_singaporensis-SAMN04489717_0384-61% AVACVAAPVSDHTGATVAAMSISVPTVRWSPERAAELAGLVREGASALSVRLGHVPDAHLVTVADRGET----------------------------------------------------------FR
+Actinopolymorpha_singaporensis-SAMN04489717_0384-61% AVACVAAPVSDHTGATVAAMSISVPTVRWSPERAAELAGLVREGASALSVRLGHVPDAHLVTVADRGETF----------------------------------------------------------R
 Natronosporangium_hydrolyticum-JQS43_13595-57%       SVGCVAAPVTDHTGAVVAGLSISVPTPRWSAARRTELSELVRQGAQELSLRLGTARADHRGQPPQRGRRQQVPGGVTLQQTVGLAQGRPLTHRPDQGTGREQQQRDADGPAQPGPPPCPPQPQPDRGHR
 //

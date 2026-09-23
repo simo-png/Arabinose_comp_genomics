@@ -1,0 +1,6 @@
+gene	cutoff	rule	note
+SCO2401	670.9	noise+gap	noise 641.2 (single genome, Peterkaempfera sp.; next non-ortholog 422.7) + 25% of gap to trusted 760.0
+SCO2402	539.7	trusted	lowest RBH ortholog; orthologs and non-orthologs only 3.7 bits apart
+SCO2407	618.8	trusted	lowest RBH ortholog; orthologs and non-orthologs overlap
+SCO2439	314.8	noise+gap	noise 270.8 + 25% of gap to trusted 446.7
+SCO2440	318.8	noise+gap	noise 281.7 + 25% of gap to trusted 430.1

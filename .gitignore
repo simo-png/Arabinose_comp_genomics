@@ -1,3 +1,6 @@
 data
 results
 transform_gbk_faa_venez
+hmm_search/logs/*
+!hmm_search/logs/.gitkeep
+__pycache__/

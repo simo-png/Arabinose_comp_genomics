@@ -12,6 +12,7 @@ import sys
 from pathlib import Path
 
 CPU = 10
+OUT_DIR = "Streptomycetae"
 
 
 def parse_args() -> argparse.Namespace:
@@ -36,7 +37,7 @@ def main() -> int:
     project_dir = script_dir.parent
 
     hmm_db = project_dir / "profiles" / "streptomycetae_conserved.hmm"
-    out_dir = project_dir / "results" / "raw" / "Actinobacteria"
+    out_dir = project_dir / "results" / "raw" / OUT_DIR
     log_dir = project_dir / "logs"
 
     if not hmm_db.is_file():

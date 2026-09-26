@@ -43,3 +43,17 @@ Couldn't find ID Streptomyces_okerensis in the tree
 Couldn't find ID Streptomyces_xinghaiensis_S187 in the tree
 Couldn't find ID (Streptomyces_nigra:0.064879456 in the tree
 ```
+
+## 2026-09-25
+
+- Documented where the *S. venezuelae* ara gene names are recorded. The gene names are in the FASTA headers in `RBH/data/arabinose_clusters/`, and are confirmed by `old_locus_tag` in `transform_gbk_faa_venez/Streptomyces_venezuelae_strain_NRRL_B-65442.gbff`:
+
+| vnz number | Gene | New locus tag |
+|---|---|---|
+| `vnz_33170` | lacI | — |
+| `vnz_33175` | araB | `vnz_RS33510` |
+| `vnz_33180` | araA | `vnz_RS33515` |
+| `vnz_33185` | araD | — |
+
+- No araC is annotated among the vnz genes (no `/gene="araC"` in the GenBank file); the cluster regulator is labelled lacI (`vnz_33170`).
+- The SCO files (SCO2401–2403, SCO2407, SCO2439, SCO2440) carry only locus tags in their headers, with no gene names.

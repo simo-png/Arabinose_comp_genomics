@@ -5,8 +5,8 @@ set -euo pipefail
 
 
 FAA_DIR="/vol/local/calarass/Projects/lipid_genomics/faa_files"
-OUT_DIR="/vol/local/calarass/Projects/ara_comp_genomics/data"
-REF_DB_DIR="/vol/local/calarass/Projects/ara_comp_genomics/results/databases"
+OUT_DIR="/vol/local/calarass/Projects/ara_comp_genomics/RBH/data"
+REF_DB_DIR="/vol/local/calarass/Projects/ara_comp_genomics/RBH/results/databases"
 COMBINED_FAA="${OUT_DIR}/streptomycetae_protein_database.faa"
 DB_NAME="${OUT_DIR}/streptomycetae_protein_databa_db"
 

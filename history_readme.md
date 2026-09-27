@@ -109,3 +109,27 @@ Planned fix (not done yet): rename files to drop `( ) [ ] =` (and adopt current 
 - Fixed stale paths (pre-`RBH/` reorganisation) in `RBH/config/actinos.yaml`, `RBH/config/streptomycetae.yaml`, `RBH/scripts/make_databases_actinos.sh` and `RBH/scripts/make_databases_sterptomycetae.sh`.
 - `3_annotate_tree.py` still hardcodes the streptomycetae paths — to be revisited with the planned intermediate step.
 - To check: config `genes_of_interest` use `vnz_RS335xx` names while query FASTAs/RBH output use `vnz_331xx-<gene>`.
+
+## 2026-09-27
+
+- TODO: **fix the protein headers of two genomes whose names contain square brackets.** The file names have no brackets, but every header inside still starts with the bracketed genus (NCBI brackets a genus when the species is misclassified in it):
+
+| File | Header genome name | Proteins |
+|---|---|---|
+| `lipid_genomics/actinos/faa/Actinomadura_parvosata_subsp._kistnae.faa` | `[Actinomadura]_parvosata_subsp._kistnae` | 11,809 |
+| `lipid_genomics/faa_files/Kitasatospora_papulosa_protein.faa` | `[Kitasatospora]_papulosa` | 6,456 |
+
+  The HMM/RBH scripts take the genome name from the header (part before the first `|`), so these genomes do not match their tree tips (file names). Fix (touches only the genome name at the start of each header, not product names like `[acyl-carrier-protein]`):
+```
+sed -i 's/^>\[Actinomadura\]_/>Actinomadura_/' actinos/faa/Actinomadura_parvosata_subsp._kistnae.faa
+sed -i 's/^>\[Kitasatospora\]_/>Kitasatospora_/' faa_files/Kitasatospora_papulosa_protein.faa
+```
+  Do not run it on the actinos file while PhyloPhlAn is running on `actinos/faa`. Results already built from these files (HMM `.tblout`, RBH DIAMOND databases, `streptomycetae_protein_database.faa`) keep the bracketed names until rerun.
+- *[Kitasatospora] papulosa* is effectively a *Streptomyces* — **exclude it from the *Kitasatospora* outgroup** of the Streptomycetaceae tree (root on the other 8 *Kitasatospora*).
+  - NCBI (taxid 1464011): described 1989 as "*Kitasatosporia papulosa*", a carbapenem producer (Nakamura et al., J. Antibiot. 42:18–29); name only validated in 2025 (IJSEM Validation List 226). The brackets mark a doubtful genus placement; one older NCBI label is "*Streptomyces* sp. JCM 7250".
+  - Our genome (strain NBC_01269, `GCF_036240075.1`) is 99.4% ANI to the type genome, so the identification is correct — the genus name is what is doubtful.
+  - In the Streptomycetaceae tree (`wgs_tree/output_WGS_tree/faa_files.tre`) it sits deep inside *Streptomyces*, sister to *S. glycanivorans* (support 1.000, branch 0.013), next to *S. pratensis*, *S. halstedii*, *S. nitrosporeus*; the other *Kitasatospora* are elsewhere.
+  - Treat its gene presence pattern as a *Streptomyces* one; label it "*[Kitasatospora] papulosa*" in figures.
+- Added three outgroup proteomes to `lipid_genomics/actinos/faa` (now 255 files): `Bacillus_subtilis_subsp._subtilis_str._168`, `Chloroflexus_aurantiacus_J-10-fl`, `Deinococcus_radiodurans_R1_=_ATCC_13939_=_DSM_20539`. Made from GenBank files with `lipid_genomics/scripts/gbk_to_faa.py`, so headers match the other genomes. Note: `make_databases_actinos.sh` will now include them in the RBH database and species list — filter them out (or keep as comparison) when analysing RBH/HMM results.
+- Wrote `lipid_genomics/scripts/run_wgs_tree_actinos.sh`: PhyloPhlAn 3.2.1 + IQ-TREE whole-genome tree of the Actinobacteria set plus the 3 outgroups, input `lipid_genomics/actinos/faa` (255 proteomes), output `lipid_genomics/actinos/output_WGS_tree_actinos_with_outgroup/`, logs + tool versions in `lipid_genomics/wgs_treelogs/`. Same settings as the original tree (`actinos/output_WGS_tree_actinos`, 2026-03-20): `--diversity high --remove_fragmentary_entries --fragmentary_threshold 0.67`, PhyloPhlAn marker database. Refuses to overwrite an existing output folder and checks afterwards that no genome was dropped.
+- `lipid_genomics/wgs_tree/actinos_with_outgroup.cfg`: copy of `actinos.cfg` (made with PhyloPhlAn's config writer) with IQ-TREE `-nt AUTO` -> `-nt 12`, to cap CPU use on the shared server.

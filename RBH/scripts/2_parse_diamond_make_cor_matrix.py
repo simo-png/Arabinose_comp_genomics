@@ -68,6 +68,11 @@ list_of_species = read_species_list(INPUT_SPECIES_LIST)
 presence_absence_df = pd.DataFrame(0, index=list_of_species, columns=list_of_genes)
 
 reciprocal_hits_df = pd.read_csv(RECIPROCAL_HITS_FILE, sep="\t")
+# reciprocal_hits.tsv also holds the forward hits that failed the reverse check (no rev_bitscore): not orthologs
+n_failed = reciprocal_hits_df.rev_bitscore.isna().sum()
+if n_failed:
+    print(f"{n_failed} forward hit(s) failed the reciprocal check - not counted")
+reciprocal_hits_df = reciprocal_hits_df[reciprocal_hits_df.rev_bitscore.notna()]
 
 unmatched_genomes = set()
 for _, row in reciprocal_hits_df.iterrows():

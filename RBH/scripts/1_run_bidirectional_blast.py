@@ -48,7 +48,7 @@ FWD_COLS = ["qseqid", "sseqid", "pident", "length", "qlen", "slen",
 REV_COLS = ["qseqid", "sseqid", "pident", "evalue", "bitscore"]
 SELF_ID_COLS = ["qseqid", "sseqid", "pident", "bitscore"]
 
-DEFAULT_CONFIG_PATH = Path(__file__).resolve().parent.parent / "config" / "streptomycetae.yaml"
+DEFAULT_CONFIG_PATH = Path(__file__).resolve().parent.parent / "config" / "actinos.yaml"
 
 
 class Config(BaseModel):
@@ -75,6 +75,9 @@ class Config(BaseModel):
     rev_evalue: float = Field(gt=0)
     rev_max_targets: int = Field(gt=0)
     genome_sep: Optional[str] = None
+    # True: only the best forward hit(s) per (query, genome) are reverse-checked;
+    # False: every forward hit is reverse-checked, so extra copies in a genome are kept
+    strict: bool = True
 
     # A query is expected to BE a protein already present in its own
     # reference proteome, not just a homolog of one. Step 0 requires at
@@ -115,6 +118,7 @@ FWD_SCOV = str(cfg.fwd_scov) if cfg.fwd_scov is not None else None
 REV_EVALUE = str(cfg.rev_evalue)
 REV_MAX_TARGETS = str(cfg.rev_max_targets)
 GENOME_SEP = cfg.genome_sep
+STRICT = cfg.strict
 
 SELF_ID_MIN_PIDENT = cfg.self_id_min_pident
 
@@ -131,7 +135,7 @@ def read_tsv(path, names):
 
 
 def reference_group(query_file):
-    """Which reference organism a query id belongs to, based on its prefix."""
+    """Which reference organism a query id belongs to, based on its prefix. SCO or VNZ"""
     upper = query_file.upper()
     for group in REFERENCE_PROTEOMES:
         if upper.startswith(group):
@@ -206,6 +210,10 @@ for fasta_file in sorted(fasta_dir.glob("*.fasta")):
     true_ref_ids[fasta_file.stem] = find_self_id(fasta_file, group)
     print(f"  true reference id: {true_ref_ids[fasta_file.stem]}")
 
+    # lower identity cutoff for SCO2402 only; every other query uses fwd_id from the config
+    fwd_id = "56" if fasta_file.stem == "SCO2402" else FWD_ID
+    print(f"  forward identity cutoff: {fwd_id}%")
+
     out = fwd_dir / f"{fasta_file.stem}_forward.tsv"
     cmd = [DIAMOND, "blastp",
            "-q", str(fasta_file),
@@ -215,7 +223,7 @@ for fasta_file in sorted(fasta_dir.glob("*.fasta")):
            "--algo", "1",
            "--max-target-seqs", "0",
            "-e", FWD_EVALUE,
-           "--id", FWD_ID,
+           "--id", fwd_id,
            "--query-cover", FWD_QCOV]
     # in case the subject cover is also wanted 
     if FWD_SCOV:
@@ -273,7 +281,7 @@ for group, proteome in REFERENCE_PROTEOMES.items():
 
 rev = pd.concat(rev_tables, ignore_index=True) if rev_tables else pd.DataFrame(
     columns=["hit", "ref_protein", "rev_pident", "rev_evalue", "rev_bitscore", "ref_group"])
-# ref_protein comes straight off the reference proteome's composite
+# ref_protein comes straight off the reference proteome's header
 # 'ORGANISM|LOCUS_TAG|description|accession' headers - reduce to the bare
 # locus tag so it's comparable to true_ref_id below.
 rev["ref_protein"] = rev["ref_protein"].map(bare_id)
@@ -297,6 +305,9 @@ if GENOME_SEP:
 
     # only the best hit(s) survive - true orthologs candidates, one per genome per query
     fwd_hits_best = fwd_hits[fwd_hits.bitscore == top_fwd_bitscore]
+else:
+    # no genome column -> paralogs cannot be collapsed, every forward hit goes to the reciprocal check
+    fwd_hits_best = fwd_hits
 
 # Step 4, rewrite (v2) - building this up line by line
 
@@ -306,13 +317,34 @@ max_bitscore = rev.groupby(["hit", "ref_group"])["rev_bitscore"].transform("max"
 # keep only the top-scoring row(s) per group (ties included)
 best_rev = rev[rev.rev_bitscore == max_bitscore]
 
-# left-merge so every forward hit is kept; a match means true_ref_id was among the top reverse hits for that sseqid, within its own ref_group
-reciprocal_check_df = fwd_hits.merge(
-    best_rev[["hit", "ref_group", "ref_protein", "rev_bitscore"]],
-    left_on=["true_ref_id", "sseqid", "ref_group"],
-    right_on=["ref_protein", "hit", "ref_group"],
-    how="left",
-).drop(columns=["ref_protein", "hit"])  # only rev_bitscore is kept from best_rev
+# strict RBH: only the best forward hit(s) per (query, genome) are checked (ties kept); the left merge keeps
+# each of them, and a match means true_ref_id was among the top reverse hits for that sseqid, within its own ref_group.
+# Lower-scoring copies in the same genome are not checked and end up in possible_paralogs.tsv
+
+if STRICT == True:
+    print("Strict RBH: only the best forward hit(s) per (query, genome) are checked (ties kept).")
+    
+
+    reciprocal_check_df = fwd_hits_best.merge(
+        best_rev[["hit", "ref_group", "ref_protein", "rev_bitscore"]],
+        left_on=["true_ref_id", "sseqid", "ref_group"],
+        right_on=["ref_protein", "hit", "ref_group"],
+        how="left",
+    ).drop(columns=["ref_protein", "hit"]) 
+    
+else: 
+    
+    
+    
+    
+    reciprocal_check_df = fwd_hits.merge(
+        best_rev[["hit", "ref_group", "ref_protein", "rev_bitscore"]],
+        left_on=["true_ref_id", "sseqid", "ref_group"],
+        right_on=["ref_protein", "hit", "ref_group"],
+        how="left",
+    ).drop(columns=["ref_protein", "hit"]) 
+
+
 
 # Keep rev hits not already accounted for in reciprocal_check_df's sseqid column
 possible_paralogs = rev[~rev.hit.isin(reciprocal_check_df.sseqid)]

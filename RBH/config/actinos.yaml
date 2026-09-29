@@ -23,14 +23,16 @@ reference_dbs:
 threads: 12
 
 fwd_evalue: 1.0e-5
-fwd_id: 65
-fwd_qcov: 70
-fwd_scov: 70
+fwd_id: 45
+fwd_qcov: 65
+fwd_scov: 65
 
 rev_evalue: 1.0e-5
 rev_max_targets: 5
 # genome separator, if none then the in_paralogs are not filtered
 genome_sep: "|"
+# true = reverse-check only the best forward hit per (query, genome); false = every hit
+strict: false
 
 self_id_min_pident: 98.0
 

@@ -55,7 +55,14 @@ The genome-derived input files are too large for git and are provided as a separ
 | `actinos_protein_database_db.dmnd` | DIAMOND database of all Actinobacteria proteomes | `RBH/data/` |
 | `coelicolor_db.dmnd`, `venezuelae_db.dmnd` | DIAMOND databases of the two reference proteomes (reverse search) | `RBH/results/databases/` |
 | Whole-genome tree(s) | PhyloPhlAn / IQ-TREE trees of the Streptomycetaceae and Actinobacteria sets, used for the iTOL figures | <!-- TODO --> |
-| `.faa` proteomes | <!-- TODO: are the per-genome .faa files included? They are needed for the HMM search and synteny steps --> | <!-- TODO --> |
+| `.faa` proteomes | One protein FASTA per genome, for the Streptomycetaceae (207 genomes) and Actinobacteria (252 genomes) sets, including the *S. coelicolor* A3(2) and *S. venezuelae* NRRL B-65442 reference proteomes | any folder (see below) |
+
+The `.faa` proteomes are needed to rebuild the DIAMOND databases, for the reverse search of the RBH pipeline
+(the two reference proteomes), for the HMM search and for the synteny checks (gene order is taken from the
+order of the proteins in each file). Protein headers have the form `>Genome|LOCUS_TAG|description|accession`.
+After unzipping, point the following to their folders: `FAA_DIR` in `RBH/scripts/make_databases_*.sh`,
+`reference_proteomes` in `RBH/config/*.yaml`, the argument of `hmm_search/scripts/05_search_genomes.py` and
+`ACTINO_FAA_DIR` in `hmm_search/scripts/07_selection_criteria.ipynb`.
 
 The databases were pre-computed from the `.faa` files with `RBH/scripts/make_databases_sterptomycetae.sh` and
 `RBH/scripts/make_databases_actinos.sh`. The scripts used to build the whole-genome trees can be found at

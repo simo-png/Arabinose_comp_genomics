@@ -128,6 +128,10 @@ All parameters (paths, DIAMOND thresholds, genes, species list) live in `RBH/con
 **Outputs** (`RBH/results/diamond_reverseBLAST_<set>/`): `forward/`, `reverse/`, `reciprocal/reciprocal_hits.tsv`
 (the orthologs), `correlation_matrix.csv` (presence/absence) and the iTOL dataset.
 
+The final Streptomycetaceae results are in `RBH/results/diamond_reverseBLAST_streptomycetae/`.
+`RBH/results/diamond_reverseBLAST_streptomycetae_nonstrict_2026-09-27/` is an earlier run kept for comparison
+only.
+
 `synteny.ipynb` checks whether the orthologs found are next to each other in the genome (gene clusters), and
 `run_bidirectional_blast_qc.ipynb` contains quality checks of the RBH run.
 

@@ -110,6 +110,14 @@ For every query protein (the 10 genes above, `RBH/data/arabinose_clusters/`):
    `strict: false`, every forward hit is checked, not only the best one per genome, so paralogs that also pass
    the reciprocal test are kept (e.g. several araB copies in one genome).
 
+**Synteny.** Where the genes are expected to cluster, we checked gene order with the functions in
+`shared/synteny.py` (gene positions are taken from the order of the proteins in each `.faa` file) and used it to
+guide the thresholds. For example, in *S. coelicolor* SCO2401–SCO2403 sit next to each other, and SCO2402 hits
+frequently cluster with confident hits of SCO2401 and SCO2403 even below the 65 % identity cutoff. The cutoff is
+therefore too strict for this gene and was lowered to **56 % for SCO2402 only** (set in
+`1_run_bidirectional_blast.py`; all other genes use `fwd_id` from the config). The synteny checks are in
+`synteny.ipynb`.
+
 ### How to run
 
 ```bash
@@ -139,7 +147,6 @@ The final Streptomycetaceae results are in `RBH/results/diamond_reverseBLAST_str
 `RBH/results/diamond_reverseBLAST_streptomycetae_nonstrict_2026-09-27/` is an earlier run kept for comparison
 only.
 
-`synteny.ipynb` checks whether the orthologs found are next to each other in the genome (gene clusters), and
 `run_bidirectional_blast_qc.ipynb` contains quality checks of the RBH run.
 
 ---
@@ -166,16 +173,16 @@ of orthologs and searched every Actinobacteria proteome with it.
 4. **Combine** the per-gene profiles into one file (`profiles/streptomycetae_conserved.hmm`).
 5. **Search** every proteome with `hmmsearch`, without a score cutoff, so all hits down to E = 10 are kept.
 6. **Select orthologs** (`07_selection_criteria.ipynb`). For each genome and gene only the best-scoring
-   protein is considered. A per-gene bitscore threshold is calibrated on the Streptomycetaceae genomes, where
-   the RBH orthologs are known:
+   protein is considered. The HMM hits in the Streptomycetaceae genomes are benchmarked against the
+   *Streptomyces* RBH orthologs (section 1), and a per-gene bitscore threshold is derived from that comparison:
    - *lowest true hit*: the lowest bitscore of an HMM best hit that is also an RBH ortholog;
    - *highest second best*: the highest bitscore of a best non-ortholog hit;
    - **threshold = highest second best + 0.5 × (lowest true hit − highest second best)**, i.e. halfway
      between the two.
 
-   A best hit passes when its bitscore is at or above the threshold of its gene. The notebook also checks
-   whether the passing araA/araB/araD and SCO2401–SCO2403 hits sit next to each other in the genome
-   (synteny).
+   A best hit passes when its bitscore is at or above the threshold of its gene. The thresholds are then
+   applied to the Actinobacteria genomes. As for RBH, the synteny functions (`shared/synteny.py`) are used to
+   check whether the passing araA/araB/araD and SCO2401–SCO2403 hits sit next to each other in the genome.
 7. **Presence/absence matrix and iTOL dataset** (`08_make_correlation_matrix.py`, `09_annotate_tree.py`).
    Genome names are converted to the tip names of the whole-genome tree (`=`, `(`, `)` → `_`).
 

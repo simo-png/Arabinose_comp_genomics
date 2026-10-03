@@ -29,7 +29,7 @@ taxonomic order (`taxonomy_heatmap/`).
 ara_comp_genomics/
 ├── RBH/                    reciprocal best hits (Streptomycetaceae)
 │   ├── config/             one YAML per genome set (paths, DIAMOND thresholds, genes)
-│   ├── data/               query proteins + DIAMOND databases (databases: see "Data to download")
+│   ├── data/               query proteins + DIAMOND databases (databases: see Getting started)
 │   └── scripts/
 ├── hmm_search/             profile HMM search (Actinobacteria)
 │   ├── data/seeds/         seed sequences per gene (included in this repository)
@@ -44,7 +44,32 @@ ara_comp_genomics/
 
 ---
 
-## Data to download
+## Getting started
+
+### Step 1: Set up the environment
+
+All tools for the RBH search, the HMM search and the notebooks are in one conda environment,
+`environment.yml`. Create and activate it before running anything else:
+
+```bash
+conda env create -f environment.yml      # or: mamba / micromamba create -f environment.yml
+conda activate ara_comp_genomics
+```
+
+| Tool | Version | Used for |
+|---|---|---|
+| DIAMOND | 2.1.12 | RBH forward and reverse searches |
+| MAFFT | 7.526 | seed alignments |
+| HMMER | 3.4 | `hmmbuild`, `hmmsearch`, `esl-reformat` |
+| NCBI `datasets` CLI | 18.38.0 | taxonomy retrieval |
+| Python | 3.13 | all scripts and notebooks (pandas 2.2.3, numpy 2.2, matplotlib 3.10, biopython 1.85, pyyaml, pydantic 2) |
+
+The whole-genome trees were built with PhyloPhlAn 3.2.1 and IQ-TREE in a separate environment (not part of this
+repository; see Step 2).
+
+In VS Code / Jupyter, select the `ara_comp_genomics` environment's Python as the notebook kernel.
+
+### Step 2: Download the data
 
 The genome-derived input files are too large for git and are provided as a separate zip archive:
 <!-- TODO: link to the zip (e.g. Zenodo DOI) -->
@@ -73,29 +98,6 @@ A list of the *Streptomyces* isolates used in this study will be added to this r
 
 > **Paths.** The scripts and YAML configs currently contain absolute paths of the server the analysis was run
 > on (`/vol/local/calarass/...`). Change them to your own locations before running.
-
----
-
-## Software
-
-All tools for the RBH search, the HMM search and the notebooks are in one conda environment,
-`environment.yml`:
-
-```bash
-conda env create -f environment.yml      # or: mamba / micromamba create -f environment.yml
-conda activate ara_comp_genomics
-```
-
-| Tool | Version | Used for |
-|---|---|---|
-| DIAMOND | 2.1.12 | RBH forward and reverse searches |
-| MAFFT | 7.526 | seed alignments |
-| HMMER | 3.4 | `hmmbuild`, `hmmsearch`, `esl-reformat` |
-| NCBI `datasets` CLI | 18.38.0 | taxonomy retrieval |
-| Python | 3.13 | all scripts and notebooks (pandas 2.2.3, numpy 2.2, matplotlib 3.10, biopython 1.85, pyyaml, pydantic 2) |
-
-The whole-genome trees were built with PhyloPhlAn 3.2.1 and IQ-TREE in a separate environment (not part of this
-repository; see "Data to download").
 
 ---
 

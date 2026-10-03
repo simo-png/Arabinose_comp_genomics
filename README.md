@@ -202,8 +202,7 @@ python 08_make_correlation_matrix.py   # -> results/correlation_matrix_actinos.c
 python 09_annotate_tree.py             # -> results/itol_binary_actinos.txt
 ```
 
-The alignments and profiles are included, so the search can start at step 5. `06_summarize.py` is an
-earlier ortholog call based on the self-hit scores; the final calls come from `07_selection_criteria.ipynb`.
+The alignments and profiles are included, so the search can start at step 5.
 
 ---
 

@@ -1,4 +1,8 @@
-data
+data/
+# the HMM seed sequences are part of the repository
+!hmm_search/data/
+hmm_search/data/*
+!hmm_search/data/seeds/
 results
 transform_gbk_faa_venez
 hmm_search/logs/*

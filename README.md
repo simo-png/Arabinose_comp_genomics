@@ -144,8 +144,9 @@ All parameters (paths, DIAMOND thresholds, genes, species list) live in `RBH/con
 (the orthologs), `correlation_matrix.csv` (presence/absence) and the iTOL dataset.
 
 The final Streptomycetaceae results are in `RBH/results/diamond_reverseBLAST_streptomycetae/`.
-`RBH/results/diamond_reverseBLAST_streptomycetae_nonstrict_2026-09-27/` is an earlier run kept for comparison
-only.
+`RBH/results/diamond_reverseBLAST_streptomycetae_nonstrict_2026-09-27/` is an earlier run with the 65 % identity
+cutoff for all genes (including SCO2402), kept for comparison only. Despite the folder name, both runs used
+`strict: false`.
 
 `run_bidirectional_blast_qc.ipynb` contains quality checks of the RBH run.
 
@@ -174,7 +175,8 @@ of orthologs and searched every Actinobacteria proteome with it.
 5. **Search** every proteome with `hmmsearch`, without a score cutoff, so all hits down to E = 10 are kept.
 6. **Select orthologs** (`07_selection_criteria.ipynb`). For each genome and gene only the best-scoring
    protein is considered. The HMM hits in the Streptomycetaceae genomes are benchmarked against the
-   *Streptomyces* RBH orthologs (section 1), and a per-gene bitscore threshold is derived from that comparison:
+   *Streptomyces* RBH orthologs of the final run (section 1, `diamond_reverseBLAST_streptomycetae/`), and a
+   per-gene bitscore threshold is derived from that comparison:
    - *lowest true hit*: the lowest bitscore of an HMM best hit that is also an RBH ortholog;
    - *highest second best*: the highest bitscore of a best non-ortholog hit;
    - **threshold = highest second best + 0.5 × (lowest true hit − highest second best)**, i.e. halfway

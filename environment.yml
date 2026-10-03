@@ -1,0 +1,24 @@
+# Software environment for the ara_comp_genomics analysis (RBH, HMM search, notebooks).
+# Create with:  conda env create -f environment.yml   (or mamba / micromamba)
+# The whole-genome trees (PhyloPhlAn 3.2.1 + IQ-TREE) were built in a separate environment.
+name: ara_comp_genomics
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - python=3.13
+  # sequence search
+  - diamond=2.1.12
+  - hmmer=3.4
+  - mafft=7.526
+  # NCBI taxonomy (taxonomy_heatmap/scripts/01_get_taxonomy.py)
+  - ncbi-datasets-cli
+  # scripts and notebooks
+  - pandas=2.2.3
+  - numpy=2.2
+  - matplotlib=3.10
+  - biopython=1.85
+  - pyyaml=6.0
+  - pydantic=2
+  - jupyter
+  - nbconvert

@@ -78,17 +78,24 @@ A list of the *Streptomyces* isolates used in this study will be added to this r
 
 ## Software
 
-| Tool | Version used | Used for |
+All tools for the RBH search, the HMM search and the notebooks are in one conda environment,
+`environment.yml`:
+
+```bash
+conda env create -f environment.yml      # or: mamba / micromamba create -f environment.yml
+conda activate ara_comp_genomics
+```
+
+| Tool | Version | Used for |
 |---|---|---|
 | DIAMOND | 2.1.12 | RBH forward and reverse searches |
 | MAFFT | 7.526 | seed alignments |
 | HMMER | 3.4 | `hmmbuild`, `hmmsearch`, `esl-reformat` |
-| Python | 3.13 | all scripts and notebooks |
-| pandas, numpy, matplotlib, biopython, pyyaml, pydantic | pandas 2.2.3, biopython 1.85 | |
-| NCBI `datasets` CLI | | taxonomy retrieval |
-| PhyloPhlAn 3.2.1 + IQ-TREE | | whole-genome trees (not part of this repository) |
+| NCBI `datasets` CLI | 18.38.0 | taxonomy retrieval |
+| Python | 3.13 | all scripts and notebooks (pandas 2.2.3, numpy 2.2, matplotlib 3.10, biopython 1.85, pyyaml, pydantic 2) |
 
-<!-- TODO: add an environment.yml for exact reproducibility -->
+The whole-genome trees were built with PhyloPhlAn 3.2.1 and IQ-TREE in a separate environment (not part of this
+repository; see "Data to download").
 
 ---
 

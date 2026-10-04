@@ -3,7 +3,12 @@
 against every genome .faa file in a user-supplied directory. One hmmsearch
 invocation per genome: hmmsearch iterates all models in the combined profile
 file internally, so this is 1 run per genome, not 1 run per gene per genome.
-Output: results/raw/<genome_stem>.tblout, plus a matching log per genome.
+Output: results/raw/<genome_set>/<genome_stem>.tblout, plus a matching log per
+genome in logs/<genome_set>/.
+
+Usage:
+    python 05_search_genomes.py /path/to/streptomycetae/faa Streptomycetae
+    python 05_search_genomes.py /path/to/actinobacteria/faa Actinobacteria
 """
 
 import argparse
@@ -12,15 +17,18 @@ import sys
 from pathlib import Path
 
 CPU = 10
-OUT_DIR = "Streptomycetae"
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument(
         "genome_faa_dir",
         type=Path,
         help="Directory containing one .faa protein file per genome",
+    )
+    parser.add_argument(
+        "genome_set",
+        help="Name of the genome set, used as the output folder name (e.g. Streptomycetae, Actinobacteria)",
     )
     return parser.parse_args()
 
@@ -37,8 +45,8 @@ def main() -> int:
     project_dir = script_dir.parent
 
     hmm_db = project_dir / "profiles" / "streptomycetae_conserved.hmm"
-    out_dir = project_dir / "results" / "raw" / OUT_DIR
-    log_dir = project_dir / "logs"
+    out_dir = project_dir / "results" / "raw" / args.genome_set
+    log_dir = project_dir / "logs" / args.genome_set
 
     if not hmm_db.is_file():
         print(f"Combined profile database not found: {hmm_db}", file=sys.stderr)
@@ -53,7 +61,7 @@ def main() -> int:
         print(f"No .faa files found in {genome_dir}", file=sys.stderr)
         return 1
 
-    print(f"Searching {len(faa_files)} genomes in {genome_dir} against {hmm_db.name}")
+    print(f"Searching {len(faa_files)} genomes in {genome_dir} against {hmm_db.name} -> {out_dir}")
 
     for faa_file in faa_files:
         stem = faa_file.stem

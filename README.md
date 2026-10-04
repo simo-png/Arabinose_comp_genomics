@@ -107,8 +107,7 @@ genome set can be saved in, or read from, the folder of another:
 
 | Script | Setting | Set it to |
 |---|---|---|
-| `hmm_search/scripts/05_search_genomes.py` | `OUT_DIR` (default `"Streptomycetae"`) | the genome set being searched: `"Streptomycetae"` or `"Actinobacteria"`; results go to `hmm_search/results/raw/<OUT_DIR>/` |
-| `hmm_search/scripts/05_search_genomes.py` | `CPU` (default 10) | the number of cores you can use |
+| `hmm_search/scripts/05_search_genomes.py` | `CPU` (default 10) | the number of cores you can use (the genome set is given on the command line, see section 2) |
 | `hmm_search/scripts/08_make_correlation_matrix.py` | `INPUT_FILE`, `TBLOUT_DIR`, `OUTPUT_FILE` | the passing hits, raw results folder and output of the genome set (default: Actinobacteria) |
 | `hmm_search/scripts/09_annotate_tree.py` | `INPUT_FILE`, `OUTPUT_FILE` | the matrix from script 08 and the iTOL file to write (default: Actinobacteria) |
 | `RBH/scripts/3_annotate_tree.py` | `INPUT_FILE`, `OUTPUT_FILE` | the RBH results folder of the run (default: `diamond_reverseBLAST_streptomycetae/`) |
@@ -224,10 +223,10 @@ bash 03_build_hmms.sh            # -> profiles/individual/
 python 03b_self_hit_check.py     # sanity check -> results/summary/self_hit_check.tsv
 bash 04_press_db.sh              # -> profiles/streptomycetae_conserved.hmm
 
-# search each genome set. Before EACH run, set OUT_DIR at the top of 05_search_genomes.py to the
-# genome set (see Step 3 of Getting started); otherwise both sets are saved in raw/Streptomycetae/
-python 05_search_genomes.py /path/to/streptomycetae/faa     # with OUT_DIR = "Streptomycetae"
-python 05_search_genomes.py /path/to/actinobacteria/faa     # with OUT_DIR = "Actinobacteria"
+# search each genome set: <faa folder> <genome set name>
+# -> results/raw/<genome set>/<genome>.tblout, logs in logs/<genome set>/
+python 05_search_genomes.py /path/to/streptomycetae/faa Streptomycetae
+python 05_search_genomes.py /path/to/actinobacteria/faa Actinobacteria
 
 # ortholog selection: run 07_selection_criteria.ipynb top to bottom
 #   -> results/actino_top_hits_passed.tsv, results/strep_top_hits.tsv

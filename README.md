@@ -197,8 +197,8 @@ of orthologs and searched every Actinobacteria proteome with it.
    back by its own model.
 4. **Combine** the per-gene profiles into one file (`profiles/streptomycetae_conserved.hmm`).
 5. **Search** every proteome with `hmmsearch`, without a score cutoff, so all hits down to E = 10 are kept.
-6. **Select orthologs** (`07_selection_criteria.ipynb`). For each genome and gene only the best-scoring
-   protein is considered. The HMM hits in the Streptomycetaceae genomes are benchmarked against the
+6. **Select orthologs** (`07_selection_criteria.ipynb`). The HMM hits in the Streptomycetaceae genomes are
+   benchmarked against the
    *Streptomyces* RBH orthologs of the final run (section 1, `diamond_reverseBLAST_streptomycetae/`), and a
    per-gene bitscore threshold is derived from that comparison:
    - *lowest true hit*: the lowest bitscore of an HMM best hit that is also an RBH ortholog;
@@ -206,9 +206,16 @@ of orthologs and searched every Actinobacteria proteome with it.
    - **threshold = highest second best + 0.5 × (lowest true hit − highest second best)**, i.e. halfway
      between the two.
 
-   A best hit passes when its bitscore is at or above the threshold of its gene. The thresholds are then
-   applied to the Actinobacteria genomes. As for RBH, the synteny functions (`shared/synteny.py`) are used to
-   check whether the passing araA/araB/araD and SCO2401–SCO2403 hits sit next to each other in the genome.
+   For SCO2403 the threshold was lowered to **349**: the SCO2403 homologs next to SCO2401 in four
+   Actinobacteria genomes (*Saccharopolyspora erythraea*, *Actinopolyspora erythraea*, *Natronosporangium
+   hydrolyticum*, *Rubrobacter xylanophilus*) score 353–366, below the midpoint threshold (420.8) but above the
+   highest non-ortholog score in the Streptomycetaceae benchmark (332.4).
+
+   All hits at or above the threshold of their gene are kept, not only the best hit per genome, so a genome can
+   have several copies of a gene. The thresholds are then applied to the Actinobacteria genomes. As for RBH,
+   the synteny functions (`shared/synteny.py`) are used to check whether the passing araA/araB/araD and
+   SCO2401–SCO2403 hits sit next to each other in the genome. In the per-order counts (`taxonomy_heatmap/`), a
+   genome with several copies of a gene is counted once.
 7. **Presence/absence matrix and iTOL dataset** (`08_make_correlation_matrix.py`, `09_annotate_tree.py`).
    Genome names are converted to the tip names of the whole-genome tree (`=`, `(`, `)` → `_`).
 

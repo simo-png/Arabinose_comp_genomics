@@ -235,6 +235,13 @@ bash 04_press_db.sh              # -> profiles/streptomycetae_conserved.hmm
 python 05_search_genomes.py /path/to/streptomycetae/faa Streptomycetae
 python 05_search_genomes.py /path/to/actinobacteria/faa Actinobacteria
 
+# the Actinobacteria .faa folder also holds the three outgroups used to root the whole-genome tree;
+# they are not part of the analysis, so remove their results before step 07
+rm ../results/raw/Actinobacteria/Bacillus_subtilis_subsp._subtilis_str._168.tblout \
+   ../results/raw/Actinobacteria/Chloroflexus_aurantiacus_J-10-fl.tblout \
+   "../results/raw/Actinobacteria/Deinococcus_radiodurans_R1_=_ATCC_13939_=_DSM_20539.tblout"
+ls ../results/raw/Actinobacteria/*.tblout | wc -l   # should be 252
+
 # ortholog selection: run 07_selection_criteria.ipynb top to bottom
 #   -> results/actino_top_hits_passed.tsv, results/strep_top_hits.tsv
 

@@ -22,7 +22,6 @@ path as the first CLI argument, e.g.:
     python run_bidirectional_blast.py ../config/streptomycetae.yaml
     python run_bidirectional_blast.py ../config/actinomycetes.yaml
 
-Requirements: diamond, pandas, pydantic, pyyaml
 """
 
 
@@ -204,9 +203,11 @@ paralog_dir.mkdir(exist_ok=True)
 print("Step 0 + 1: identifying true reference ids and running forward DIAMOND searches...")
 fwd_tables = []
 true_ref_ids = {}
+# fasta dir - query proteins
 for fasta_file in sorted(fasta_dir.glob("*.fasta")):
     print(f"Processing {fasta_file.name}...")
     group = reference_group(fasta_file.stem)
+    # find its true id 
     true_ref_ids[fasta_file.stem] = find_self_id(fasta_file, group)
     print(f"  true reference id: {true_ref_ids[fasta_file.stem]}")
 
@@ -307,7 +308,9 @@ if GENOME_SEP:
     fwd_hits_best = fwd_hits[fwd_hits.bitscore == top_fwd_bitscore]
 else:
     # no genome column -> paralogs cannot be collapsed, every forward hit goes to the reciprocal check
+    # best hits computed here but irrelevant below
     fwd_hits_best = fwd_hits
+    
 
 # Step 4, rewrite (v2) - building this up line by line
 

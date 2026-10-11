@@ -67,7 +67,7 @@ conda activate ara_comp_genomics
 | Python | 3.13 | all scripts and notebooks (pandas 2.2.3, numpy 2.2, matplotlib 3.10, biopython 1.85, pyyaml, pydantic 2) |
 
 The whole-genome trees were built with PhyloPhlAn 3.2.1 and IQ-TREE in a separate environment (not part of this
-repository; scripts in `data_preparation/3_wgs_trees/`).
+repository; scripts in `data_preparation/3_wgs_trees/`, see section 0).
 
 In VS Code / Jupyter, select the `ara_comp_genomics` environment's Python as the notebook kernel.
 
@@ -92,8 +92,8 @@ After unzipping, point the following to their folders: `FAA_DIR` in `RBH/scripts
 `ACTINO_FAA_DIR` and `STREP_FAA_DIR` in `hmm_search/scripts/07_selection_criteria.ipynb`.
 
 The databases were pre-computed from the `.faa` files with `RBH/scripts/make_databases_sterptomycetae.sh` and
-`RBH/scripts/make_databases_actinos.sh`. The scripts used to download the genomes, make the `.faa` files and build the whole-genome trees are in
-`data_preparation/` (see `data_preparation/README.md`).
+`RBH/scripts/make_databases_actinos.sh`. How the `.faa` proteomes and the whole-genome trees were made is
+documented in `data_preparation/` (section 0).
 
 A list of the *Streptomyces* isolates used in this study will be added to this repository.
 <!-- TODO: add the isolate list (file name / location) -->
@@ -115,6 +115,29 @@ genome set can be saved in, or read from, the folder of another:
 | `RBH/scripts/3_annotate_tree.py` | `INPUT_FILE`, `OUTPUT_FILE` | the RBH results folder of the run (default: `diamond_reverseBLAST_streptomycetae/`) |
 | `RBH/scripts/1_run_bidirectional_blast.py`, `2_parse_diamond_make_cor_matrix.py` | the config file | always pass it on the command line (e.g. `../config/streptomycetae.yaml`); without it, script 1 uses `actinos.yaml` but script 2 uses `streptomycetae.yaml` |
 | `RBH/config/*.yaml` | `output_dir`, `threads` | a new folder for every new run, so earlier results are not overwritten; the cores you can use |
+
+---
+
+## 0. Data preparation (`data_preparation/`)
+
+The scripts that produced the input data of this repository: downloading the genomes from NCBI, converting the
+GenBank files to `.faa` proteomes and building the whole-genome trees. They are included so the data preparation is
+documented, in the form they were run (see `data_preparation/README.md` for the order of the steps and the tool
+versions):
+
+| Folder | Contents |
+|---|---|
+| `1_download/` | NCBI download commands and scripts, the genome lists (Streptomycetaceae assembly accessions, Actinobacteria COG table) |
+| `2_proteomes/` | GenBank (`.gbff`) to `.faa` conversion, species list |
+| `3_wgs_trees/` | PhyloPhlAn / IQ-TREE scripts and configs of the two whole-genome trees |
+
+**You do not need to run these scripts.** Their outputs (the `.faa` proteomes and the whole-genome trees) are
+provided in the data archive (Getting started, Step 2), and the analyses below start from those files.
+
+The scripts are **not designed to run seamlessly with this repository**: they come from a separate working
+directory, contain the absolute paths of the server the analysis was run on, and are not connected to the rest of
+the code. If you want to regenerate the data yourself, you can adapt them (paths, tool locations, input lists) to
+your own setup.
 
 ---
 

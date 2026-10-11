@@ -1,0 +1,8 @@
+Run started: Tue Sep 29 11:52:17 PM CEST 2026
+PhyloPhlAn version 3.2.1 (13 February 2026)
+IQ-TREE:  IQ-TREE version 3.0.1 for Linux x86 64-bit built Jul  9 2025
+MAFFT:    v7.525 (2024/Mar/13)
+trimAl:   trimAl v1.5.rev1 build[2025-11-25]
+DIAMOND:  diamond version 2.1.24
+Outgroup: Kitasatospora_camelliae,Kitasatospora_cathayae,Kitasatospora_fiedleri,Kitasatospora_griseola,Kitasatospora_herbaricolor,Kitasatospora_hibisci,Kitasatospora_purpeofusca,Kitasatospora_setae_KM-6054,Peterkaempfera_bronchialis,Peterkaempfera_sp._SMS_15a
+Run finished: Wed Sep 30 05:53:38 AM CEST 2026

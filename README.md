@@ -38,6 +38,8 @@ ara_comp_genomics/
 │   └── scripts/
 ├── taxonomy_heatmap/       NCBI taxonomy of the Actinobacteria genomes, per-order heatmap
 ├── shared/                 helpers used by several pipelines (genome names, synteny)
+├── data_preparation/       scripts used to download the genomes, make the .faa files and build the trees
+│                           (as run, for documentation; see data_preparation/README.md)
 └── history_readme.md       running log of decisions and changes (also hmm_search/history.md,
                             taxonomy_heatmap/history.md)
 ```
@@ -65,7 +67,7 @@ conda activate ara_comp_genomics
 | Python | 3.13 | all scripts and notebooks (pandas 2.2.3, numpy 2.2, matplotlib 3.10, biopython 1.85, pyyaml, pydantic 2) |
 
 The whole-genome trees were built with PhyloPhlAn 3.2.1 and IQ-TREE in a separate environment (not part of this
-repository; see Step 2).
+repository; scripts in `data_preparation/3_wgs_trees/`).
 
 In VS Code / Jupyter, select the `ara_comp_genomics` environment's Python as the notebook kernel.
 
@@ -90,8 +92,8 @@ After unzipping, point the following to their folders: `FAA_DIR` in `RBH/scripts
 `ACTINO_FAA_DIR` and `STREP_FAA_DIR` in `hmm_search/scripts/07_selection_criteria.ipynb`.
 
 The databases were pre-computed from the `.faa` files with `RBH/scripts/make_databases_sterptomycetae.sh` and
-`RBH/scripts/make_databases_actinos.sh`. The scripts used to build the whole-genome trees can be found at
-<!-- TODO: location of run_wgs_tree_streptomycetae.sh / run_wgs_tree_actinos.sh -->.
+`RBH/scripts/make_databases_actinos.sh`. The scripts used to download the genomes, make the `.faa` files and build the whole-genome trees are in
+`data_preparation/` (see `data_preparation/README.md`).
 
 A list of the *Streptomyces* isolates used in this study will be added to this repository.
 <!-- TODO: add the isolate list (file name / location) -->

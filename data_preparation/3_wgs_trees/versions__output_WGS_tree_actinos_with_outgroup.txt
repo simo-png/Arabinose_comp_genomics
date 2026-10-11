@@ -1,0 +1,7 @@
+Run started: Sun Sep 27 12:51:28 PM CEST 2026
+PhyloPhlAn version 3.2.1 (13 February 2026)
+IQ-TREE:  IQ-TREE version 3.0.1 for Linux x86 64-bit built Jul  9 2025
+MAFFT:    v7.525 (2024/Mar/13)
+trimAl:   trimAl v1.5.rev1 build[2025-11-25]
+DIAMOND:  diamond version 2.1.24
+Run finished: Sun Sep 27 03:46:52 PM CEST 2026

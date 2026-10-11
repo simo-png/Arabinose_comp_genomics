@@ -87,7 +87,7 @@ The `.faa` proteomes are needed to rebuild the DIAMOND databases, for the revers
 order of the proteins in each file). Protein headers have the form `>Genome|LOCUS_TAG|description|accession`.
 After unzipping, point the following to their folders: `FAA_DIR` in `RBH/scripts/make_databases_*.sh`,
 `reference_proteomes` in `RBH/config/*.yaml`, the argument of `hmm_search/scripts/05_search_genomes.py` and
-`ACTINO_FAA_DIR` in `hmm_search/scripts/07_selection_criteria.ipynb`.
+`ACTINO_FAA_DIR` and `STREP_FAA_DIR` in `hmm_search/scripts/07_selection_criteria.ipynb`.
 
 The databases were pre-computed from the `.faa` files with `RBH/scripts/make_databases_sterptomycetae.sh` and
 `RBH/scripts/make_databases_actinos.sh`. The scripts used to build the whole-genome trees can be found at

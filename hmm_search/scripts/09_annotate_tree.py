@@ -12,13 +12,17 @@ Output:
 itol_binary_actinos.txt
 """
 
+from pathlib import Path
+
 import pandas as pd
 
 
 # USER SETTINGS
 
-INPUT_FILE = "/vol/local/calarass/Projects/ara_comp_genomics/hmm_search/results/correlation_matrix_actinos.csv"
-OUTPUT_FILE = "/vol/local/calarass/Projects/ara_comp_genomics/hmm_search/results/itol_binary_actinos.txt"
+RESULTS_DIR = Path(__file__).resolve().parent.parent / "results"   # hmm_search/results
+
+INPUT_FILE = RESULTS_DIR / "correlation_matrix_actinos.csv"
+OUTPUT_FILE = RESULTS_DIR / "itol_binary_actinos.txt"
 
 DATASET_LABEL = "HMM_presence_actinos"
 DATASET_COLOR = "#3182bd"

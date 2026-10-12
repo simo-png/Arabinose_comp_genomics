@@ -21,7 +21,7 @@ import pandas as pd
 
 # USER SETTINGS
 
-HMM_DIR = Path("/vol/local/calarass/Projects/ara_comp_genomics/hmm_search")
+HMM_DIR = Path(__file__).resolve().parent.parent   # hmm_search/
 
 INPUT_FILE = HMM_DIR / "results" / "actino_top_hits_passed.tsv"
 TBLOUT_DIR = HMM_DIR / "results" / "raw" / "Actinobacteria"   

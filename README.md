@@ -149,8 +149,7 @@ No paths need to be changed. The scripts, configs and notebooks find their files
 notebooks from the folder they are opened in), and `hmm_search/scripts/05_search_genomes.py` takes the proteome
 folder on the command line (`../../RBH/data/strep_faa` or `../../RBH/data/actino_faa`, see section 2). DIAMOND,
 HMMER and the NCBI `datasets` CLI are taken from the conda environment of Step 1; in VS Code / Jupyter, select its
-Python as the notebook kernel. (`RBH/scripts/run_bidirectional_blast_qc.ipynb` is a record of earlier quality
-checks and still contains the paths of the server the analysis was run on.)
+Python as the notebook kernel.
 
 How the `.faa` proteomes and the whole-genome trees were made is documented in `data_preparation/` (section 0).
 
@@ -252,8 +251,6 @@ The final Streptomycetaceae results are in `RBH/results/diamond_reverseBLAST_str
 `RBH/results/diamond_reverseBLAST_streptomycetae_nonstrict_2026-09-27/` is an earlier run with the 65 % identity
 cutoff for all genes (including SCO2402), kept for comparison only. Despite the folder name, both runs used
 `strict: false`.
-
-`run_bidirectional_blast_qc.ipynb` contains quality checks of the RBH run.
 
 ---
 

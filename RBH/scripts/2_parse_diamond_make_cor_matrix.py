@@ -34,7 +34,14 @@ from pathlib import Path
 import pandas as pd
 import yaml
 
-DEFAULT_CONFIG_PATH = Path(__file__).resolve().parent.parent / "config" / "streptomycetae.yaml"
+REPO_DIR = Path(__file__).resolve().parents[2]
+DEFAULT_CONFIG_PATH = REPO_DIR / "RBH" / "config" / "streptomycetae.yaml"
+
+
+def repo_path(path):
+    """Config paths without a leading / are relative to the repository root."""
+    path = Path(path)
+    return path if path.is_absolute() else REPO_DIR / path
 
 
 def read_species_list(filepath):
@@ -52,9 +59,9 @@ config_path = Path(sys.argv[1]) if len(sys.argv) > 1 else DEFAULT_CONFIG_PATH
 with open(config_path) as fh:
     cfg = yaml.safe_load(fh)
 
-output_dir = Path(cfg["output_dir"])
+output_dir = repo_path(cfg["output_dir"])
 RECIPROCAL_HITS_FILE = output_dir / "reciprocal" / "reciprocal_hits.tsv"
-INPUT_SPECIES_LIST = cfg["species_list"]
+INPUT_SPECIES_LIST = repo_path(cfg["species_list"])
 list_of_genes = cfg["genes_of_interest"]
 OUTPUT_DIR = output_dir
 NAME_OUTPUT_FILE = cfg["correlation_matrix_name"]

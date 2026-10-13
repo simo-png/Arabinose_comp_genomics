@@ -36,6 +36,10 @@ download the same genomes again.
 `gbk_to_faa.py` was run on the Streptomycetaceae, Actinobacteria and outgroup downloads. The genome name in the
 headers (the part before the first `|`) is the name used in all result tables.
 
+The Streptomycetaceae files were made with an earlier version of `gbk_to_faa.py` that named them
+`<organism>_protein.faa` (e.g. `Streptomyces_rochei_protein.faa`); the version here names them `<organism>.faa`.
+Only the file name differs, the headers are the same.
+
 ## 3. Whole-genome trees (`3_wgs_trees/`)
 
 | File | What it does |
@@ -43,10 +47,15 @@ headers (the part before the first `|`) is the name used in all result tables.
 | `run_wgs_tree_streptomycetae.sh` | Streptomycetaceae tree: PhyloPhlAn 3 (400 markers, `--diversity medium`) + IQ-TREE (LG+G4, 1000 SH-aLRT + 1000 UFBoot), rooted on *Kitasatospora* + *Peterkaempfera* |
 | `streptomycetae.cfg.template`, `streptomycetae.cfg` | PhyloPhlAn config: the template, and the config the script wrote from it (with the outgroup) |
 | `check_wgs_tree_streptomycetae.py` | checks that every genome is in the tree and that the outgroup is one clade |
-| `run_wgs_tree_actinos.sh` | Actinobacteria + outgroups tree: PhyloPhlAn 3 (`--diversity high`) + IQ-TREE (LG) |
-| `actinos.cfg` | PhyloPhlAn config used by `run_wgs_tree_actinos.sh` |
-| `run_iqtree_support_actinos.sh` | branch support for the Actinobacteria tree (ModelFinder, SH-aLRT, UFBoot, site concordance factors) |
-| `versions__*.txt` | tool versions and run times of the two tree runs |
+| `run_wgs_tree_actinos_mfp.sh` | Actinobacteria + outgroups tree: PhyloPhlAn 3 (`--diversity high`) + IQ-TREE with the best-fit model chosen by ModelFinder (BIC), 1000 SH-aLRT + 1000 UFBoot |
+| `actinos_mfp.cfg` | PhyloPhlAn config used by `run_wgs_tree_actinos_mfp.sh` |
+| `versions__*.txt` | tool versions and run times of the tree runs |
 
 Tool versions (from `versions__*.txt`): PhyloPhlAn 3.2.1, IQ-TREE 3.0.1, MAFFT 7.525, trimAl 1.5.rev1,
 DIAMOND 2.1.24.
+
+**Actinobacteria tree.** Input: the 252 Actinobacteria proteomes plus three outgroups from other phyla (*Bacillus
+subtilis* 168, *Chloroflexus aurantiacus* J-10-fl, *Deinococcus radiodurans* R1), 255 proteomes. The tree is written
+unrooted (IQ-TREE draws it from the first genome of the alignment, which is not a root); it was rooted on
+*D. radiodurans* afterwards (`taxonomy_heatmap/scripts/02_group_by_order.ipynb`, step 10a).
+<!-- TODO after the run: best-fit model chosen by ModelFinder (in the .iqtree file) and the versions file of the run -->

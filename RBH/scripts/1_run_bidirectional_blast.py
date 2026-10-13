@@ -47,7 +47,14 @@ FWD_COLS = ["qseqid", "sseqid", "pident", "length", "qlen", "slen",
 REV_COLS = ["qseqid", "sseqid", "pident", "evalue", "bitscore"]
 SELF_ID_COLS = ["qseqid", "sseqid", "pident", "bitscore"]
 
-DEFAULT_CONFIG_PATH = Path(__file__).resolve().parent.parent / "config" / "actinos.yaml"
+REPO_DIR = Path(__file__).resolve().parents[2]
+DEFAULT_CONFIG_PATH = REPO_DIR / "RBH" / "config" / "actinos.yaml"
+
+
+def repo_path(path):
+    """Config paths without a leading / are relative to the repository root."""
+    path = Path(path)
+    return path if path.is_absolute() else REPO_DIR / path
 
 
 class Config(BaseModel):
@@ -101,11 +108,11 @@ config_path = Path(sys.argv[1]) if len(sys.argv) > 1 else DEFAULT_CONFIG_PATH
 with open(config_path) as fh:
     cfg = Config(**yaml.safe_load(fh))
 
-fasta_dir = cfg.fasta_dir
-diamond_db = cfg.diamond_db
-output_dir = cfg.output_dir
-REFERENCE_PROTEOMES = cfg.reference_proteomes
-REFERENCE_DBS = cfg.reference_dbs
+fasta_dir = repo_path(cfg.fasta_dir)
+diamond_db = repo_path(cfg.diamond_db)
+output_dir = repo_path(cfg.output_dir)
+REFERENCE_PROTEOMES = {group: repo_path(p) for group, p in cfg.reference_proteomes.items()}
+REFERENCE_DBS = {group: repo_path(p) for group, p in cfg.reference_dbs.items()}
 
 THREADS = str(cfg.threads)
 

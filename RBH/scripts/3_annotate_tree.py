@@ -27,8 +27,10 @@ from names import tree_name
 
 # USER SETTINGS
 
-INPUT_FILE = "/vol/local/calarass/Projects/ara_comp_genomics/RBH/results/diamond_reverseBLAST_streptomycetae/correlation_matrix.csv"
-OUTPUT_FILE = "/vol/local/calarass/Projects/ara_comp_genomics/RBH/results/diamond_reverseBLAST_streptomycetae/itol_binary_streptomycetae.txt"
+RESULTS_DIR = Path(__file__).resolve().parent.parent / "results" / "diamond_reverseBLAST_streptomycetae"
+
+INPUT_FILE = RESULTS_DIR / "correlation_matrix.csv"
+OUTPUT_FILE = RESULTS_DIR / "itol_binary_streptomycetae.txt"
 
 DATASET_LABEL = "GeneClusterPresence"
 DATASET_COLOR = "#3182bd"

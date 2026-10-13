@@ -143,15 +143,12 @@ complete, compare the number of sequences reported by `diamond dbinfo -d <databa
 
 ### Step 4: Point the code to the proteome folders
 
-The database scripts find the proteomes themselves; the files below still contain the absolute paths of the
-server the analysis was run on (`/vol/local/calarass/...`). Change these settings to the folders of Step 2
-(paths in the YAML configs may be relative to the repository root):
+The database scripts, the RBH configs (`RBH/config/*.yaml`) and `RBH/scripts/synteny.ipynb` already use the
+folders of Step 2. The files below still contain the absolute paths of the server the analysis was run on
+(`/vol/local/calarass/...`); change these settings to the folders of Step 2:
 
 | File | Setting | Set it to |
 |---|---|---|
-| `RBH/config/streptomycetae.yaml`, `RBH/config/actinos.yaml` | `reference_proteomes` | `RBH/data/strep_faa/Streptomyces_coelicolor_A3(2)_protein.faa` (SCO) and `RBH/data/strep_faa/Streptomyces_venezuelae_strain_NRRL_B-65442.faa` (VNZ) |
-| `RBH/config/streptomycetae.yaml` | `species_list` | `RBH/data/strep_faa/species_list.txt` |
-| `RBH/scripts/synteny.ipynb` | `PROJECT_DIR`, `FAA_DIR` | the repository folder, `RBH/data/strep_faa` |
 | `hmm_search/scripts/07_selection_criteria.ipynb` | `PROJECT_DIR`, `STREP_FAA_DIR`, `ACTINO_FAA_DIR` | the repository folder, `RBH/data/strep_faa`, `RBH/data/actino_faa` |
 | `hmm_search/scripts/05_search_genomes.py` | the folder argument | `RBH/data/strep_faa` or `RBH/data/actino_faa` (see section 2) |
 
@@ -177,10 +174,10 @@ genome set can be saved in, or read from, the folder of another:
 | Script | Setting | Set it to |
 |---|---|---|
 | `hmm_search/scripts/05_search_genomes.py` | `CPU` (default 10) | the number of cores you can use (the genome set is given on the command line, see section 2) |
-| `hmm_search/scripts/08_make_correlation_matrix.py` | `INPUT_FILE`, `TBLOUT_DIR`, `OUTPUT_FILE` | the passing hits, raw results folder and output of the genome set (default: Actinobacteria) |
+| `hmm_search/scripts/08_make_presence_absence_matrix.py` | `INPUT_FILE`, `TBLOUT_DIR`, `OUTPUT_FILE` | the passing hits, raw results folder and output of the genome set (default: Actinobacteria) |
 | `hmm_search/scripts/09_annotate_tree.py` | `INPUT_FILE`, `OUTPUT_FILE` | the matrix from script 08 and the iTOL file to write (default: Actinobacteria) |
 | `RBH/scripts/3_annotate_tree.py` | `INPUT_FILE`, `OUTPUT_FILE` | the RBH results folder of the run (default: `diamond_reverseBLAST_streptomycetae/`) |
-| `RBH/scripts/1_run_bidirectional_blast.py`, `2_parse_diamond_make_cor_matrix.py` | the config file | always pass it on the command line (e.g. `../config/streptomycetae.yaml`); without it, script 1 uses `actinos.yaml` but script 2 uses `streptomycetae.yaml` |
+| `RBH/scripts/1_run_bidirectional_blast.py`, `2_parse_diamond_make_presence_absence_matrix.py` | the config file | always pass it on the command line (e.g. `../config/streptomycetae.yaml`); without it, script 1 uses `actinos.yaml` but script 2 uses `streptomycetae.yaml` |
 | `RBH/config/*.yaml` | `output_dir`, `threads` | a new folder for every new run, so earlier results are not overwritten; the cores you can use |
 
 ---
@@ -230,8 +227,8 @@ For every query protein (the 10 genes above, `RBH/data/arabinose_clusters/`):
 `shared/synteny.py` (gene positions are taken from the order of the proteins in each `.faa` file) and used it to
 guide the thresholds. For example, in *S. coelicolor* SCO2401–SCO2403 sit next to each other, and SCO2402 hits
 frequently cluster with confident hits of SCO2401 and SCO2403 even below the 65 % identity cutoff. The cutoff is
-therefore too strict for this gene and was lowered to **56 % for SCO2402 only** (set in
-`1_run_bidirectional_blast.py`; all other genes use `fwd_id` from the config). The synteny checks are in
+therefore too strict for this gene and was lowered to **56 % for SCO2402 only** (`fwd_id_per_query` in
+`streptomycetae.yaml`; all other genes use `fwd_id`). The synteny checks are in
 `synteny.ipynb`.
 
 ### How to run
@@ -246,7 +243,7 @@ bash make_databases_sterptomycetae.sh
 python 1_run_bidirectional_blast.py ../config/streptomycetae.yaml
 
 # 2. presence/absence matrix (genomes x genes)
-python 2_parse_diamond_make_cor_matrix.py ../config/streptomycetae.yaml
+python 2_parse_diamond_make_presence_absence_matrix.py ../config/streptomycetae.yaml
 
 # 3. iTOL binary dataset for the whole-genome tree
 python 3_annotate_tree.py
@@ -257,7 +254,7 @@ All parameters (paths, DIAMOND thresholds, genes, species list) live in `RBH/con
 ≥ 65 % coverage); it was used for comparison with the HMM results.
 
 **Outputs** (`RBH/results/diamond_reverseBLAST_<set>/`): `forward/`, `reverse/`, `reciprocal/reciprocal_hits.tsv`
-(the orthologs), `correlation_matrix.csv` (presence/absence) and the iTOL dataset.
+(the orthologs), `presence_absence_matrix.csv` (presence/absence) and the iTOL dataset.
 
 The final Streptomycetaceae results are in `RBH/results/diamond_reverseBLAST_streptomycetae/`.
 `RBH/results/diamond_reverseBLAST_streptomycetae_nonstrict_2026-09-27/` is an earlier run with the 65 % identity
@@ -308,7 +305,7 @@ of orthologs and searched every Actinobacteria proteome with it.
    the synteny functions (`shared/synteny.py`) are used to check whether the passing araA/araB/araD and
    SCO2401–SCO2403 hits sit next to each other in the genome. In the per-order counts (`taxonomy_heatmap/`), a
    genome with several copies of a gene is counted once.
-7. **Presence/absence matrix and iTOL dataset** (`08_make_correlation_matrix.py`, `09_annotate_tree.py`).
+7. **Presence/absence matrix and iTOL dataset** (`08_make_presence_absence_matrix.py`, `09_annotate_tree.py`).
    Genome names are converted to the tip names of the whole-genome tree (`=`, `(`, `)` → `_`).
 
 ### How to run
@@ -337,7 +334,7 @@ ls ../results/raw/Actinobacteria/*.tblout | wc -l   # should be 252
 # ortholog selection: run 07_selection_criteria.ipynb top to bottom
 #   -> results/actino_top_hits_passed.tsv, results/strep_top_hits.tsv
 
-python 08_make_correlation_matrix.py   # -> results/correlation_matrix_actinos.csv
+python 08_make_presence_absence_matrix.py   # -> results/presence_absence_matrix_actinos.csv
 python 09_annotate_tree.py             # -> results/itol_binary_actinos.txt
 ```
 
@@ -364,7 +361,7 @@ Streptomycetaceae get their own rows.
 
 - **Genome names** differ between the `.faa` files, the NCBI assembly names and the tree tips (characters such
   as `(`, `)`, `[`, `]` and `=` are replaced in trees). `shared/names.py` and the conversion in
-  `08_make_correlation_matrix.py` handle this; see `history_readme.md` for details.
+  `08_make_presence_absence_matrix.py` handle this; see `history_readme.md` for details.
 - *[Kitasatospora] papulosa* falls inside *Streptomyces* in the tree and is treated as a *Streptomyces*.
 - The Actinobacteria tree is rooted on *Deinococcus radiodurans*; *Bacillus subtilis*, *Chloroflexus
   aurantiacus* and *D. radiodurans* were added as outgroups for the tree only.

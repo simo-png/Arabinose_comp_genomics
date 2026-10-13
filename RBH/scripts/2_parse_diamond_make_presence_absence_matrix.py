@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Generate a gene presence/absence correlation matrix from reciprocal-BLAST results.
+Generate a gene presence/absence matrix from reciprocal-BLAST results.
 
 Reads reciprocal_hits.tsv (the output of run_bidirectional_blast.py's Step 4 -
 forward hits that passed the reciprocal best-hit check) and builds a binary
@@ -24,7 +24,7 @@ Uses the same YAML config as run_bidirectional_blast.py, so output_dir (and
 therefore the reciprocal_hits.tsv it reads) always matches the run that
 config points at - pass the config path as the first CLI argument, e.g.:
 
-    python 2_parse_diamond_make_cor_matrix.py ../config/streptomycetae.yaml
+    python 2_parse_diamond_make_presence_absence_matrix.py ../config/streptomycetae.yaml
 """
 
 
@@ -64,7 +64,7 @@ RECIPROCAL_HITS_FILE = output_dir / "reciprocal" / "reciprocal_hits.tsv"
 INPUT_SPECIES_LIST = repo_path(cfg["species_list"])
 list_of_genes = cfg["genes_of_interest"]
 OUTPUT_DIR = output_dir
-NAME_OUTPUT_FILE = cfg["correlation_matrix_name"]
+NAME_OUTPUT_FILE = cfg["presence_absence_matrix_name"]
 
 if not list_of_genes:
     print("Please provide a list of genes to check for reciprocal hits.")
@@ -100,4 +100,4 @@ if unmatched_genomes:
 # Save the presence/absence matrix as a CSV file
 output_file = OUTPUT_DIR / NAME_OUTPUT_FILE
 presence_absence_df.to_csv(output_file)
-print(f"Correlation matrix saved to {output_file}")
+print(f"Presence/absence matrix saved to {output_file}")

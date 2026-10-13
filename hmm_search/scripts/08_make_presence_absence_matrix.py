@@ -25,7 +25,7 @@ HMM_DIR = Path(__file__).resolve().parent.parent   # hmm_search/
 
 INPUT_FILE = HMM_DIR / "results" / "actino_top_hits_passed.tsv"
 TBLOUT_DIR = HMM_DIR / "results" / "raw" / "Actinobacteria"   
-OUTPUT_FILE = HMM_DIR / "results" / "correlation_matrix_actinos.csv"
+OUTPUT_FILE = HMM_DIR / "results" / "presence_absence_matrix_actinos.csv"
 
 
 # tree label of a genome

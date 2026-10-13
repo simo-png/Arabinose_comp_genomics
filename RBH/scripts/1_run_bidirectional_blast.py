@@ -19,8 +19,8 @@ All run parameters (paths, reference organisms, DIAMOND thresholds) live in
 a YAML config file, validated by the Config model below - pass the config
 path as the first CLI argument, e.g.:
 
-    python run_bidirectional_blast.py ../config/streptomycetae.yaml
-    python run_bidirectional_blast.py ../config/actinomycetes.yaml
+    python 1_run_bidirectional_blast.py ../config/streptomycetae.yaml
+    python 1_run_bidirectional_blast.py ../config/actinomycetes.yaml
 
 """
 
@@ -51,7 +51,11 @@ REV_COLS = ["qseqid", "sseqid", "pident", "evalue", "bitscore"]
 SELF_ID_COLS = ["qseqid", "sseqid", "pident", "bitscore"]
 
 REPO_DIR = Path(__file__).resolve().parents[2]
+
+# chnage depending on which config you want to use, actinos.yaml or streptomycetae.yaml
 DEFAULT_CONFIG_PATH = REPO_DIR / "RBH" / "config" / "actinos.yaml"
+#DEFAULT_CONFIG_PATH = REPO_DIR / "RBH" / "config" / "streptomycetae.yaml"
+
 
 
 def repo_path(path):
@@ -78,6 +82,8 @@ class Config(BaseModel):
 
     fwd_evalue: float = Field(gt=0)
     fwd_id: float = Field(ge=0, le=100)
+    # per-query exceptions to fwd_id, e.g. {"SCO2402": 56}; keys are query file names without .fasta
+    fwd_id_per_query: Dict[str, float] = {}
     fwd_qcov: float = Field(ge=0, le=100)
     fwd_scov: Optional[float] = Field(default=None, ge=0, le=100)
 
@@ -221,8 +227,8 @@ for fasta_file in sorted(fasta_dir.glob("*.fasta")):
     true_ref_ids[fasta_file.stem] = find_self_id(fasta_file, group)
     print(f"  true reference id: {true_ref_ids[fasta_file.stem]}")
 
-    # lower identity cutoff for SCO2402 only; every other query uses fwd_id from the config
-    fwd_id = "56" if fasta_file.stem == "SCO2402" else FWD_ID
+    # identity cutoff: fwd_id from the config, unless the query has its own in fwd_id_per_query
+    fwd_id = str(cfg.fwd_id_per_query.get(fasta_file.stem, cfg.fwd_id))
     print(f"  forward identity cutoff: {fwd_id}%")
 
     out = fwd_dir / f"{fasta_file.stem}_forward.tsv"

@@ -3,7 +3,7 @@
 """
 Convert a gene presence/absence matrix into an iTOL DATASET_BINARY file.
 
-Input format (csv, from 08_make_correlation_matrix.py):
+Input format (csv, from 08_make_presence_absence_matrix.py):
 ,AraA,AraB,AraD
 species1,1,0,1
 species2,0,1,1
@@ -21,7 +21,7 @@ import pandas as pd
 
 RESULTS_DIR = Path(__file__).resolve().parent.parent / "results"   # hmm_search/results
 
-INPUT_FILE = RESULTS_DIR / "correlation_matrix_actinos.csv"
+INPUT_FILE = RESULTS_DIR / "presence_absence_matrix_actinos.csv"
 OUTPUT_FILE = RESULTS_DIR / "itol_binary_actinos.txt"
 
 DATASET_LABEL = "HMM_presence_actinos"

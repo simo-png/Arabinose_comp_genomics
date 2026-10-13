@@ -4,8 +4,8 @@
 # streptomycetae.yaml.
 # Usage: python run_bidirectional_blast.py ../config/actinos.yaml
 
-# Paths without a leading / are relative to the repository root (resolved by the scripts);
-# reference_proteomes and species_list outside the repository must be set to your own files.
+# Paths without a leading / are relative to the repository root (resolved by the scripts).
+# The reference proteomes are in RBH/data/strep_faa (README, Getting started, Step 2).
 
 fasta_dir: RBH/data/arabinose_clusters
 diamond_db: RBH/data/actinos_protein_database_db.dmnd
@@ -14,8 +14,8 @@ output_dir: RBH/results/diamond_reverseBLAST_actinos
 # Each query belongs to one of these reference organisms, identified by its
 # query_file prefix (e.g. SCO* -> coelicolor, VNZ* -> venezuelae).
 reference_proteomes:
-  SCO: /vol/local/calarass/Projects/lipid_genomics/faa_files/Streptomyces_coelicolor_A3(2)_protein.faa
-  VNZ: /vol/local/calarass/Projects/lipid_genomics/faa_files/Streptomyces_venezuelae_strain_NRRL_B-65442.faa
+  SCO: RBH/data/strep_faa/Streptomyces_coelicolor_A3(2)_protein.faa
+  VNZ: RBH/data/strep_faa/Streptomyces_venezuelae_strain_NRRL_B-65442.faa
 
 # Pre-built DIAMOND databases for the exact same proteomes above (built by
 # make_databases_sterptomycetae.sh; reused as-is for this run).
@@ -27,6 +27,8 @@ threads: 12
 
 fwd_evalue: 1.0e-5
 fwd_id: 45
+# per-query exceptions to fwd_id (see streptomycetae.yaml); none for this genome set
+fwd_id_per_query: {}
 fwd_qcov: 65
 fwd_scov: 65
 
@@ -39,7 +41,7 @@ strict: false
 
 self_id_min_pident: 98.0
 
-# Presence/absence correlation matrix (2_parse_diamond_make_cor_matrix.py).
+# Presence/absence matrix (2_parse_diamond_make_presence_absence_matrix.py).
 # species_list: one genome/species name per line - must match the "genome"
 # column values in reciprocal_hits.tsv (i.e. the sseqid prefix before
 # genome_sep) or that row is skipped with a warning.
@@ -55,4 +57,4 @@ genes_of_interest:
   - vnz_RS33510
   - vnz_RS33515
   - vnz_RS33520
-correlation_matrix_name: correlation_matrix.csv
+presence_absence_matrix_name: presence_absence_matrix.csv

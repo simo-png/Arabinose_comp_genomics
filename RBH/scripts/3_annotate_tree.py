@@ -29,7 +29,7 @@ from names import tree_name
 
 RESULTS_DIR = Path(__file__).resolve().parent.parent / "results" / "diamond_reverseBLAST_streptomycetae"
 
-INPUT_FILE = RESULTS_DIR / "correlation_matrix.csv"
+INPUT_FILE = RESULTS_DIR / "presence_absence_matrix.csv"
 OUTPUT_FILE = RESULTS_DIR / "itol_binary_streptomycetae.txt"
 
 DATASET_LABEL = "GeneClusterPresence"

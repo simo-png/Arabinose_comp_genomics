@@ -6,9 +6,11 @@ set -euo pipefail
 # S. coelicolor / S. venezuelae reference proteomes used in the
 # streptomycetae-only run (see make_databases_sterptomycetae.sh).
 
-
-FAA_DIR="/vol/local/calarass/Projects/lipid_genomics/actinos/faa"
-OUT_DIR="/vol/local/calarass/Projects/ara_comp_genomics/RBH/data"
+# Paths are relative to the repository, so the script can be run from any directory.
+# FAA_DIR is the extracted Actinobacteria proteome archive (README, Getting started, Step 2).
+REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+FAA_DIR="${REPO_DIR}/RBH/data/actino_faa"
+OUT_DIR="${REPO_DIR}/RBH/data"
 COMBINED_FAA="${OUT_DIR}/actinos_protein_database.faa"
 DB_NAME="${OUT_DIR}/actinos_protein_database_db"
 SPECIES_LIST="${OUT_DIR}/actinos_species_list.txt"
@@ -41,7 +43,7 @@ echo "Wrote $(wc -l < "$SPECIES_LIST") genome names to ${SPECIES_LIST}"
 # ----------------------------------------------------------------------
 # Single-organism reference databases (coelicolor_db, venezuelae_db) are
 # NOT rebuilt here — this run reuses the same S. coelicolor / S. venezuelae
-# references as the streptomycetae run, already built at:
-#   /vol/local/calarass/Projects/ara_comp_genomics/RBH/results/databases/
+# references as the streptomycetae run, built at:
+#   RBH/results/databases/
 # See make_databases_sterptomycetae.sh if they ever need to be rebuilt.
 # ----------------------------------------------------------------------

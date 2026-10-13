@@ -3,10 +3,12 @@ set -euo pipefail
 
 # Build a DIAMOND database from all Streptomyces species
 
-
-FAA_DIR="/vol/local/calarass/Projects/lipid_genomics/faa_files"
-OUT_DIR="/vol/local/calarass/Projects/ara_comp_genomics/RBH/data"
-REF_DB_DIR="/vol/local/calarass/Projects/ara_comp_genomics/RBH/results/databases"
+# Paths are relative to the repository, so the script can be run from any directory.
+# FAA_DIR is the extracted Streptomycetaceae proteome archive (README, Getting started, Step 2).
+REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+FAA_DIR="${REPO_DIR}/RBH/data/strep_faa"
+OUT_DIR="${REPO_DIR}/RBH/data"
+REF_DB_DIR="${REPO_DIR}/RBH/results/databases"
 COMBINED_FAA="${OUT_DIR}/streptomycetae_protein_database.faa"
 DB_NAME="${OUT_DIR}/streptomycetae_protein_databa_db"
 

@@ -37,6 +37,9 @@ from pydantic import BaseModel, Field, model_validator
 # Diamond binary (explicit path so this works even when the interpreter's
 # PATH doesn't include the conda env, e.g. when run from VSCode). Same
 # across runs/species, so it's not part of the per-run YAML config.
+# This is the path on the server the analysis was run on: if it does not exist on
+# your system, replace it with "diamond" (from the conda environment, environment.yml)
+# or with the path to your own DIAMOND binary.
 DIAMOND = "/vol/local/calarass/envs/diamond/bin/diamond"
 
 # Output schema for each DIAMOND call - fixed regardless of species/run,

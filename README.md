@@ -29,7 +29,7 @@ taxonomic order (`taxonomy_heatmap/`).
 ara_comp_genomics/
 ├── RBH/                    reciprocal best hits (Streptomycetaceae)
 │   ├── config/             one YAML per genome set (paths, DIAMOND thresholds, genes)
-│   ├── data/               query proteins + DIAMOND databases (databases: see Getting started)
+│   ├── data/               query proteins; proteomes and DIAMOND databases (see Getting started, Steps 2-3)
 │   └── scripts/
 ├── hmm_search/             profile HMM search (Actinobacteria)
 │   ├── data/seeds/         seed sequences per gene (included in this repository)
@@ -71,37 +71,104 @@ repository; scripts in `data_preparation/3_wgs_trees/`, see section 0).
 
 In VS Code / Jupyter, select the `ara_comp_genomics` environment's Python as the notebook kernel.
 
-### Step 2: Download the data
+### Step 2: Download the proteomes
 
-The genome-derived input files are too large for git and are provided as a separate zip archive:
-<!-- TODO: link to the zip (e.g. Zenodo DOI) -->
+The genome-derived input files are too large for git and are provided as two separate archives:
+<!-- TODO: link to the archives (e.g. Zenodo DOI) -->
 
-| File | Description | Place it in |
+| Archive | Contents | Extract it in |
 |---|---|---|
-| `streptomycetae_protein_databa_db.dmnd` | DIAMOND database of all Streptomycetaceae proteomes (207 genomes) | `RBH/data/` |
-| `actinos_protein_database_db.dmnd` | DIAMOND database of all Actinobacteria proteomes | `RBH/data/` |
-| `coelicolor_db.dmnd`, `venezuelae_db.dmnd` | DIAMOND databases of the two reference proteomes (reverse search) | `RBH/results/databases/` |
+| `streptomycetae_faa_files_2026-10-13.tar.gz` | 207 Streptomycetaceae proteomes (one `.faa` per genome) + `species_list.txt`, including the *S. coelicolor* A3(2) and *S. venezuelae* NRRL B-65442 reference proteomes | `RBH/data/strep_faa/` |
+| `actinos_faa_2026-10-12.tar.gz` | 255 Actinobacteria proteomes (one `.faa` per genome) + `species_list.txt`: the 252 genomes of the analysis and the 3 outgroups used only to root the whole-genome tree (see section 2) | `RBH/data/actino_faa/` |
 | Whole-genome tree(s) | PhyloPhlAn / IQ-TREE trees of the Streptomycetaceae and Actinobacteria sets, used for the iTOL figures | <!-- TODO --> |
-| `.faa` proteomes | One protein FASTA per genome, for the Streptomycetaceae (207 genomes) and Actinobacteria (252 genomes) sets, including the *S. coelicolor* A3(2) and *S. venezuelae* NRRL B-65442 reference proteomes | any folder (see below) |
 
-The `.faa` proteomes are needed to rebuild the DIAMOND databases, for the reverse search of the RBH pipeline
+From the repository root, extract each archive into its own folder. The archives contain a top-level folder
+(`faa_files/` and `faa/`); `--strip-components=1` removes it, so the `.faa` files end up directly in
+`strep_faa/` and `actino_faa/`:
+
+```bash
+mkdir -p RBH/data/strep_faa RBH/data/actino_faa
+tar -xzf /path/to/streptomycetae_faa_files_2026-10-13.tar.gz -C RBH/data/strep_faa --strip-components=1
+tar -xzf /path/to/actinos_faa_2026-10-12.tar.gz            -C RBH/data/actino_faa --strip-components=1
+
+ls RBH/data/strep_faa/*.faa  | wc -l    # should be 207
+ls RBH/data/actino_faa/*.faa | wc -l    # should be 255
+```
+
+You should then have this layout (the `.faa` folders are ignored by git):
+
+```
+RBH/data/
+├── arabinose_clusters/     query proteins (part of the repository)
+├── strep_faa/              207 x <genome>.faa + species_list.txt
+└── actino_faa/             255 x <genome>.faa + species_list.txt
+```
+
+The `.faa` proteomes are needed to build the DIAMOND databases, for the reverse search of the RBH pipeline
 (the two reference proteomes), for the HMM search and for the synteny checks (gene order is taken from the
 order of the proteins in each file). Protein headers have the form `>Genome|LOCUS_TAG|description|accession`.
-After unzipping, point the following to their folders: `FAA_DIR` in `RBH/scripts/make_databases_*.sh`,
-`reference_proteomes` in `RBH/config/*.yaml`, the argument of `hmm_search/scripts/05_search_genomes.py` and
-`ACTINO_FAA_DIR` and `STREP_FAA_DIR` in `hmm_search/scripts/07_selection_criteria.ipynb`.
 
-The databases were pre-computed from the `.faa` files with `RBH/scripts/make_databases_sterptomycetae.sh` and
-`RBH/scripts/make_databases_actinos.sh`. How the `.faa` proteomes and the whole-genome trees were made is
-documented in `data_preparation/` (section 0).
+### Step 3: Build the DIAMOND databases
+
+The DIAMOND databases are not provided; build them from the proteomes (a few minutes each). Both scripts find
+their folders relative to the repository (the proteome folders of Step 2 in, `RBH/data` and
+`RBH/results/databases` out), so they need no changes.
+
+Run them with the `ara_comp_genomics` environment active (it provides `diamond`):
+
+```bash
+cd RBH/scripts
+bash make_databases_sterptomycetae.sh
+bash make_databases_actinos.sh
+```
+
+This creates:
+
+| File | Description |
+|---|---|
+| `RBH/data/streptomycetae_protein_database.faa`, `RBH/data/streptomycetae_protein_databa_db.dmnd` | all Streptomycetaceae proteomes combined, and their DIAMOND database (forward search) |
+| `RBH/data/actinos_protein_database.faa`, `RBH/data/actinos_protein_database_db.dmnd` | the same for the Actinobacteria set |
+| `RBH/data/actinos_species_list.txt` | genome names of the Actinobacteria set |
+| `RBH/results/databases/coelicolor_db.dmnd`, `RBH/results/databases/venezuelae_db.dmnd` | DIAMOND databases of the two reference proteomes (reverse search) |
+
+The Actinobacteria database includes the 3 outgroups, as in our analysis. To check that the databases are
+complete, compare the number of sequences reported by `diamond dbinfo -d <database>.dmnd` with ours:
+
+| Database | Sequences |
+|---|---|
+| `streptomycetae_protein_databa_db.dmnd` | 1,528,778 |
+| `actinos_protein_database_db.dmnd` | 1,009,655 |
+| `coelicolor_db.dmnd` | 7,767 |
+| `venezuelae_db.dmnd` | 7,437 |
+
+### Step 4: Point the code to the proteome folders
+
+The database scripts find the proteomes themselves; the files below still contain the absolute paths of the
+server the analysis was run on (`/vol/local/calarass/...`). Change these settings to the folders of Step 2
+(paths in the YAML configs may be relative to the repository root):
+
+| File | Setting | Set it to |
+|---|---|---|
+| `RBH/config/streptomycetae.yaml`, `RBH/config/actinos.yaml` | `reference_proteomes` | `RBH/data/strep_faa/Streptomyces_coelicolor_A3(2)_protein.faa` (SCO) and `RBH/data/strep_faa/Streptomyces_venezuelae_strain_NRRL_B-65442.faa` (VNZ) |
+| `RBH/config/streptomycetae.yaml` | `species_list` | `RBH/data/strep_faa/species_list.txt` |
+| `RBH/scripts/synteny.ipynb` | `PROJECT_DIR`, `FAA_DIR` | the repository folder, `RBH/data/strep_faa` |
+| `hmm_search/scripts/07_selection_criteria.ipynb` | `PROJECT_DIR`, `STREP_FAA_DIR`, `ACTINO_FAA_DIR` | the repository folder, `RBH/data/strep_faa`, `RBH/data/actino_faa` |
+| `hmm_search/scripts/05_search_genomes.py` | the folder argument | `RBH/data/strep_faa` or `RBH/data/actino_faa` (see section 2) |
+
+Other absolute paths that you may need to change:
+
+| File | Setting | What it is |
+|---|---|---|
+| `RBH/scripts/1_run_bidirectional_blast.py`, `hmm_search/scripts/07_selection_criteria.ipynb` | `DIAMOND` | the DIAMOND binary; use `"diamond"` from the conda environment |
+| `taxonomy_heatmap/scripts/01_get_taxonomy.py` | `GENOME_TABLE`, `DATASETS` | the Actinobacteria genome table (`data_preparation/1_download/COG0236_ACTINOMYCETOTA.tsv`) and the NCBI `datasets` binary (`"datasets"` from the conda environment) |
+| `taxonomy_heatmap/scripts/02_group_by_order.ipynb` | `PROJECT_DIR`, `GENOMES_DIR`, `TREE` | the repository folder, the NCBI genome downloads, the Actinobacteria whole-genome tree |
+
+How the `.faa` proteomes and the whole-genome trees were made is documented in `data_preparation/` (section 0).
 
 A list of the *Streptomyces* isolates used in this study will be added to this repository.
 <!-- TODO: add the isolate list (file name / location) -->
 
-> **Paths.** The scripts and YAML configs currently contain absolute paths of the server the analysis was run
-> on (`/vol/local/calarass/...`). Change them to your own locations before running.
-
-### Step 3: Check the settings of each run
+### Step 5: Check the settings of each run
 
 Some scripts have the genome set they run on, and where they save, written at the top of the script
 (`# USER SETTINGS`) instead of taking it as an argument. Check these before each run, otherwise results of one
@@ -132,7 +199,7 @@ versions):
 | `3_wgs_trees/` | PhyloPhlAn / IQ-TREE scripts and configs of the two whole-genome trees |
 
 **You do not need to run these scripts.** Their outputs (the `.faa` proteomes and the whole-genome trees) are
-provided in the data archive (Getting started, Step 2), and the analyses below start from those files.
+provided in the data archives (Getting started, Step 2), and the analyses below start from those files.
 
 The scripts are **not designed to run seamlessly with this repository**: they come from a separate working
 directory, contain the absolute paths of the server the analysis was run on, and are not connected to the rest of
@@ -172,7 +239,7 @@ therefore too strict for this gene and was lowered to **56 % for SCO2402 only** 
 ```bash
 cd RBH/scripts
 
-# (only if rebuilding the databases instead of downloading them)
+# 0. DIAMOND databases (once; see Getting started, Step 3)
 bash make_databases_sterptomycetae.sh
 
 # 1. reciprocal DIAMOND search
@@ -257,8 +324,8 @@ bash 04_press_db.sh              # -> profiles/streptomycetae_conserved.hmm
 
 # search each genome set: <faa folder> <genome set name>
 # -> results/raw/<genome set>/<genome>.tblout, logs in logs/<genome set>/
-python 05_search_genomes.py /path/to/streptomycetae/faa Streptomycetae
-python 05_search_genomes.py /path/to/actinobacteria/faa Actinobacteria
+python 05_search_genomes.py ../../RBH/data/strep_faa Streptomycetae
+python 05_search_genomes.py ../../RBH/data/actino_faa Actinobacteria
 
 # the Actinobacteria .faa folder also holds the three outgroups used to root the whole-genome tree;
 # they are not part of the analysis, so remove their results before step 07

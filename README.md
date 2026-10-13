@@ -144,13 +144,14 @@ complete, compare the number of sequences reported by `diamond dbinfo -d <databa
 ### Step 4: Point the code to the proteome folders
 
 The database scripts, the RBH configs (`RBH/config/*.yaml`) and `RBH/scripts/synteny.ipynb` already use the
-folders of Step 2. The files below still contain the absolute paths of the server the analysis was run on
-(`/vol/local/calarass/...`); change these settings to the folders of Step 2:
+folders of Step 2, and `hmm_search/scripts/05_search_genomes.py` takes the folder on the command line
+(`../../RBH/data/strep_faa` or `../../RBH/data/actino_faa`, see section 2). The notebook below still contains
+the absolute paths of the server the analysis was run on (`/vol/local/calarass/...`); change these settings to
+the folders of Step 2:
 
 | File | Setting | Set it to |
 |---|---|---|
 | `hmm_search/scripts/07_selection_criteria.ipynb` | `PROJECT_DIR`, `STREP_FAA_DIR`, `ACTINO_FAA_DIR` | the repository folder, `RBH/data/strep_faa`, `RBH/data/actino_faa` |
-| `hmm_search/scripts/05_search_genomes.py` | the folder argument | `RBH/data/strep_faa` or `RBH/data/actino_faa` (see section 2) |
 
 Other absolute paths that you may need to change:
 

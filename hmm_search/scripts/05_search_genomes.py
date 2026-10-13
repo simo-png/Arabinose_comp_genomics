@@ -6,9 +6,9 @@ file internally, so this is 1 run per genome, not 1 run per gene per genome.
 Output: results/raw/<genome_set>/<genome_stem>.tblout, plus a matching log per
 genome in logs/<genome_set>/.
 
-Usage:
-    python 05_search_genomes.py /path/to/streptomycetae/faa Streptomycetae
-    python 05_search_genomes.py /path/to/actinobacteria/faa Actinobacteria
+Usage (from hmm_search/scripts; the proteome folders are those of the README, Getting started, Step 2):
+    python 05_search_genomes.py ../../RBH/data/strep_faa Streptomycetae
+    python 05_search_genomes.py ../../RBH/data/actino_faa Actinobacteria
 """
 
 import argparse

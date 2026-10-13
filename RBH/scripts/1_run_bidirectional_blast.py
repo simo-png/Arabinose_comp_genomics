@@ -25,6 +25,7 @@ path as the first CLI argument, e.g.:
 """
 
 
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -34,13 +35,10 @@ import pandas as pd
 import yaml
 from pydantic import BaseModel, Field, model_validator
 
-# Diamond binary (explicit path so this works even when the interpreter's
-# PATH doesn't include the conda env, e.g. when run from VSCode). Same
-# across runs/species, so it's not part of the per-run YAML config.
-# This is the path on the server the analysis was run on: if it does not exist on
-# your system, replace it with "diamond" (from the conda environment, environment.yml)
-# or with the path to your own DIAMOND binary.
-DIAMOND = "/vol/local/calarass/envs/diamond/bin/diamond"
+# DIAMOND binary from the conda environment (environment.yml): "diamond" on the PATH, or else the one
+# next to this Python interpreter (the PATH does not always include the environment, e.g. when run from
+# VS Code). Same across runs/species, so it's not part of the per-run YAML config.
+DIAMOND = shutil.which("diamond") or str(Path(sys.executable).parent / "diamond")
 
 # Output schema for each DIAMOND call - fixed regardless of species/run,
 # so these stay as code constants rather than YAML config.

@@ -143,19 +143,14 @@ complete, compare the number of sequences reported by `diamond dbinfo -d <databa
 | `coelicolor_db.dmnd` | 7,767 |
 | `venezuelae_db.dmnd` | 7,437 |
 
-### Step 4: Check the remaining paths
+### Step 4: Paths
 
-Nothing to change for the proteomes: the database scripts, the RBH configs (`RBH/config/*.yaml`),
-`RBH/scripts/synteny.ipynb` and `hmm_search/scripts/07_selection_criteria.ipynb` use the folders of Step 2 (the
-notebooks find the repository from the folder they are opened in), and `hmm_search/scripts/05_search_genomes.py`
-takes the folder on the command line (`../../RBH/data/strep_faa` or `../../RBH/data/actino_faa`, see section 2).
-
-Other absolute paths of the server the analysis was run on (`/vol/local/calarass/...`) that you may need to
-change:
-
-| File | Setting | What it is |
-|---|---|---|
-| `RBH/scripts/1_run_bidirectional_blast.py`, `hmm_search/scripts/07_selection_criteria.ipynb` | `DIAMOND` | the DIAMOND binary; use `"diamond"` from the conda environment |
+No paths need to be changed. The scripts, configs and notebooks find their files relative to the repository (the
+notebooks from the folder they are opened in), and `hmm_search/scripts/05_search_genomes.py` takes the proteome
+folder on the command line (`../../RBH/data/strep_faa` or `../../RBH/data/actino_faa`, see section 2). DIAMOND,
+HMMER and the NCBI `datasets` CLI are taken from the conda environment of Step 1; in VS Code / Jupyter, select its
+Python as the notebook kernel. (`RBH/scripts/run_bidirectional_blast_qc.ipynb` is a record of earlier quality
+checks and still contains the paths of the server the analysis was run on.)
 
 How the `.faa` proteomes and the whole-genome trees were made is documented in `data_preparation/` (section 0).
 

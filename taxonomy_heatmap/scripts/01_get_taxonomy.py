@@ -5,11 +5,11 @@ the Actinobacteria set, so the genomes can be grouped by order.
 Genomes and taxids come from GENOME_TABLE (columns Assembly, Genome, TaxID).
 Taxids are sent to the `datasets` CLI in batches of BATCH_SIZE - one big call
 for all genomes was very slow, a single taxid takes ~2 s. The raw answer of
-each batch is saved in results/taxonomy/raw/, and batches already on disk are
+each batch is saved in data/taxonomy/raw/, and batches already on disk are
 not fetched again, so an interrupted run resumes where it stopped (delete
 raw/ to force a fresh download).
 
-Outputs, in results/taxonomy/:
+Outputs, in data/taxonomy/ (the files used for the paper are part of the repository):
   taxonomy_orders.tsv   one row per genome: genome, assembly, taxid, class,
                         order, family, genus (empty if NCBI has no node at
                         that rank)
@@ -26,8 +26,10 @@ from pathlib import Path
 
 import pandas as pd
 
-GENOME_TABLE = Path("/vol/local/calarass/Projects/lipid_genomics/actinos/COG0236_ACTINOMYCETOTA.tsv")
-DATASETS = "/vol/local/calarass/envs/ncbi_datasets/bin/datasets"
+REPO_DIR = Path(__file__).resolve().parents[2]
+GENOME_TABLE = REPO_DIR / "data_preparation" / "1_download" / "COG0236_ACTINOMYCETOTA.tsv"
+# NCBI datasets CLI, from the conda environment (environment.yml)
+DATASETS = "datasets"
 BATCH_SIZE = 25
 RANKS = ["class", "order", "family", "genus"]
 
@@ -52,7 +54,7 @@ def fetch_batch(taxids, raw_file):
 
 
 def main():
-    out_dir = Path(__file__).resolve().parent.parent / "results" / "taxonomy"
+    out_dir = Path(__file__).resolve().parent.parent / "data" / "taxonomy"
     raw_dir = out_dir / "raw"
     raw_dir.mkdir(parents=True, exist_ok=True)
 

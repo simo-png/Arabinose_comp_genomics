@@ -7,6 +7,8 @@ RBH/data/*
 !hmm_search/data/
 hmm_search/data/*
 !hmm_search/data/seeds/
+# the taxonomy tables, genome names and Actinobacteria tree of the heatmap are part of the repository
+!taxonomy_heatmap/data/
 results
 transform_gbk_faa_venez
 hmm_search/logs/*

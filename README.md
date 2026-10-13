@@ -37,6 +37,8 @@ ara_comp_genomics/
 │   ├── profiles/           HMM profiles, one per gene + combined file
 │   └── scripts/
 ├── taxonomy_heatmap/       NCBI taxonomy of the Actinobacteria genomes, per-order heatmap
+│   ├── data/               taxonomy tables, genome names and the Actinobacteria whole-genome tree (included)
+│   └── scripts/
 ├── shared/                 helpers used by several pipelines (genome names, synteny)
 ├── data_preparation/       scripts used to download the genomes, make the .faa files and build the trees
 │                           (as run, for documentation; see data_preparation/README.md)
@@ -80,7 +82,7 @@ The genome-derived input files are too large for git and are provided as two sep
 |---|---|---|
 | `streptomycetae_faa_files_2026-10-13.tar.gz` | 207 Streptomycetaceae proteomes (one `.faa` per genome) + `species_list.txt`, including the *S. coelicolor* A3(2) and *S. venezuelae* NRRL B-65442 reference proteomes | `RBH/data/strep_faa/` |
 | `actinos_faa_2026-10-12.tar.gz` | 255 Actinobacteria proteomes (one `.faa` per genome) + `species_list.txt`: the 252 genomes of the analysis and the 3 outgroups used only to root the whole-genome tree (see section 2) | `RBH/data/actino_faa/` |
-| Whole-genome tree(s) | PhyloPhlAn / IQ-TREE trees of the Streptomycetaceae and Actinobacteria sets, used for the iTOL figures | <!-- TODO --> |
+| Whole-genome tree, Streptomycetaceae | PhyloPhlAn / IQ-TREE tree of the Streptomycetaceae set, used for the iTOL figure | <!-- TODO --> |
 
 From the repository root, extract each archive into its own folder. The archives contain a top-level folder
 (`faa_files/` and `faa/`); `--strip-components=1` removes it, so the `.faa` files end up directly in
@@ -154,8 +156,6 @@ change:
 | File | Setting | What it is |
 |---|---|---|
 | `RBH/scripts/1_run_bidirectional_blast.py`, `hmm_search/scripts/07_selection_criteria.ipynb` | `DIAMOND` | the DIAMOND binary; use `"diamond"` from the conda environment |
-| `taxonomy_heatmap/scripts/01_get_taxonomy.py` | `GENOME_TABLE`, `DATASETS` | the Actinobacteria genome table (`data_preparation/1_download/COG0236_ACTINOMYCETOTA.tsv`) and the NCBI `datasets` binary (`"datasets"` from the conda environment) |
-| `taxonomy_heatmap/scripts/02_group_by_order.ipynb` | `PROJECT_DIR`, `GENOMES_DIR`, `TREE` | the repository folder, the NCBI genome downloads, the Actinobacteria whole-genome tree |
 
 How the `.faa` proteomes and the whole-genome trees were made is documented in `data_preparation/` (section 0).
 
@@ -343,14 +343,28 @@ The alignments and profiles are included, so the search can start at step 5.
 
 ```bash
 cd taxonomy_heatmap/scripts
-python 01_get_taxonomy.py        # NCBI class/order/family/genus of every genome
-# then run 02_group_by_order.ipynb
+python 01_get_taxonomy.py        # optional: NCBI class/order/family/genus of every genome -> data/taxonomy/
+# then run 02_group_by_order.ipynb  -> results/order_heatmap.pdf
 ```
 
-`02_group_by_order.ipynb` computes, for each order with at least 9 genomes (plus Kitasatosporales), the
-fraction of genomes with a passing HMM hit per gene, and draws it as a heatmap next to an order-level tree
-derived from the Actinobacteria whole-genome tree (`results/order_heatmap.pdf`). *Streptomyces* and the other
-Streptomycetaceae get their own rows.
+The inputs of the heatmap are included in `taxonomy_heatmap/data/`:
+
+| File | Contents |
+|---|---|
+| `taxonomy/taxonomy_orders.tsv`, `taxonomy/order_counts.tsv` | NCBI taxonomy of the 253 Actinobacteria genomes and the number of genomes per order, as retrieved on 2026-09-26 by `01_get_taxonomy.py` (raw NCBI answers in `taxonomy/raw/`) |
+| `genome_names.tsv` | for every genome, its name in the `.faa` files and HMM results (the organism name in its GenBank file; empty for the one genome without a `.faa`) |
+| `actinos_wgs_tree_mfp_2026-10-11.treefile` | Actinobacteria whole-genome tree with the three outgroups (PhyloPhlAn + IQ-TREE, model chosen by ModelFinder, 1000 ultrafast bootstraps; `data_preparation/3_wgs_trees/run_wgs_tree_actinos_mfp.sh`) |
+
+`01_get_taxonomy.py` reuses the saved NCBI answers in `taxonomy/raw/`, so it does not need to be rerun; delete
+`raw/` to download the taxonomy again (NCBI taxonomy changes over time, so the orders may then differ from ours).
+It reads the genome list from `data_preparation/1_download/COG0236_ACTINOMYCETOTA.tsv` and uses the `datasets`
+CLI of the conda environment.
+
+`02_group_by_order.ipynb` also needs the HMM results of section 2 (`actino_top_hits_passed.tsv`,
+`strep_top_hits.tsv`, `presence_absence_matrix_actinos.csv`). It computes, for each order with at least 9 genomes
+(plus Kitasatosporales), the fraction of genomes with a passing HMM hit per gene, and draws it as a heatmap next to
+an order-level tree derived from the Actinobacteria whole-genome tree (`results/order_heatmap.pdf`).
+*Streptomyces* and the other Streptomycetaceae get their own rows.
 
 ---
 

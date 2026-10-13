@@ -248,9 +248,6 @@ All parameters (paths, DIAMOND thresholds, genes, species list) live in `RBH/con
 (the orthologs), `presence_absence_matrix.csv` (presence/absence) and the iTOL dataset.
 
 The final Streptomycetaceae results are in `RBH/results/diamond_reverseBLAST_streptomycetae/`.
-`RBH/results/diamond_reverseBLAST_streptomycetae_nonstrict_2026-09-27/` is an earlier run with the 65 % identity
-cutoff for all genes (including SCO2402), kept for comparison only. Despite the folder name, both runs used
-`strict: false`.
 
 ---
 

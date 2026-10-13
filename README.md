@@ -75,8 +75,8 @@ In VS Code / Jupyter, select the `ara_comp_genomics` environment's Python as the
 
 ### Step 2: Download the proteomes
 
-The genome-derived input files are too large for git and are provided as two separate archives:
-<!-- TODO: link to the archives (e.g. Zenodo DOI) -->
+The genome-derived input files are too large for git and are provided as two separate archives on Zenodo:
+[doi:10.5281/zenodo.23324891](https://doi.org/10.5281/zenodo.23324891).
 
 | Archive | Contents | Extract it in |
 |---|---|---|
